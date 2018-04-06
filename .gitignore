@@ -22,11 +22,6 @@
 hs_err_pid*
 
 # IntelliJ Files / Folders
-./.idea
+.idea/*
 ./out
-./*.iml
 *.iml
-.idea/workspace.xml
-.idea/kotlinc.xml
-.idea/misc.xml
-.idea/modules.xml
