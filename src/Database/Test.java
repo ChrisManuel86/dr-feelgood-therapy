@@ -93,20 +93,25 @@ public class Test {
      * @param settings formatted String to be split into HashMap entries
      */
     public void setSettings(String settings) {
-        if(settings == null) {
-            this.settings.put("QuestionText", "Which do you prefer?");
-            this.settings.put("TieText", "I can't decide.");
-            this.settings.put("SortMethod", "Random");
-            this.settings.put("ItemOrder", "Random");
-            this.settings.put("CustomMatchUps", "none");
-        } else {
-            String[] splitSettings = settings.split("\\\\");
-            this.settings.put("QuestionText", splitSettings[0]);
-            this.settings.put("TieText", splitSettings[1]);
-            this.settings.put("SortMethod", splitSettings[2]);
-            this.settings.put("ItemOrder", splitSettings[3]);
-            this.settings.put("CustomMatchUps", splitSettings[4]);
-            this.settings.put("all", settings);
+        try {
+            if (settings == null) {
+                this.settings.put("QuestionText", "Which do you prefer?");
+                this.settings.put("TieText", "I can't decide.");
+                this.settings.put("SortMethod", "Random");
+                this.settings.put("ItemOrder", "Random");
+                this.settings.put("CustomMatchUps", "none");
+            } else {
+                String[] splitSettings = settings.split("\\\\");
+                this.settings.put("QuestionText", splitSettings[0]);
+                this.settings.put("TieText", splitSettings[1]);
+                this.settings.put("SortMethod", splitSettings[2]);
+                this.settings.put("ItemOrder", splitSettings[3]);
+                this.settings.put("CustomMatchUps", splitSettings[4]);
+                this.settings.put("all", settings);
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e);
         }
     }
 

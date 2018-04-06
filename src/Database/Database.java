@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
+import static java.sql.DriverManager.*;
+
 
 /**
  * ResultsDB
@@ -26,10 +28,13 @@ import java.util.ArrayList;
  * - Changed getItemByItemID and getItemsByTestID to add images to items from database
  * - Added getAllSessionsForUser method
  * - Removed getAllSessionsForUser method to refactor a different way of obtaining the needed data
+ * - Changed SqlServer driver to MySql driver
+ * - Updated DB_SERVER variable to point to localhost sql server
+ * - Update SQL code to be compatible with mysql
  */
 public class Database {
     // Final Database Strings
-    private static final String DB_SERVER = "localhost:3360";
+    private static final String DB_SERVER = "localhost:3306";
     private static final String DATABASE = "dr_feelgood";
     private static final String DB_USERNAME = "feelgood_admin";
     private static final String DB_PASSWORD = "admin";
@@ -154,7 +159,7 @@ public class Database {
      * @return ArrayList matchUps
      */
     public ArrayList<MatchUp> getMatchUps(int sessionID) {
-        String itemsQuery = "SELECT QNumber, ItemID_A, ItemID_B, ISNULL(Decision,'')" +
+        String itemsQuery = "SELECT QNumber, ItemID_A, ItemID_B, IFNULL(Decision,'')" +
                 " AS Decision FROM MATCHUP WHERE SessionID = ?;";
         ArrayList<MatchUp> matchUps = new ArrayList<>();
         try {
@@ -456,7 +461,7 @@ public class Database {
         if (mConnection != null)
             return;
         try {
-            mConnection = DriverManager.getConnection(DB_CONNECTION);
+            mConnection = getConnection(DB_CONNECTION);
         } catch (SQLException e) {
             e.printStackTrace();
         }
