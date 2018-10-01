@@ -37,7 +37,7 @@ public class Database {
     private static final String DB_SERVER = "onilink86.minecraftnoob.com:3306";
     private static final String DATABASE = "dr_feelgood";
     private static final String DB_USERNAME = "feelgood_admin";
-    private static final String DB_PASSWORD = "admin";
+    private static final String DB_PASSWORD = "5u2f4tNoRZEm97za";
 //    private static final String DB_USERNAME = "root";
 //    private static final String DB_PASSWORD = "mcSQLadmin99!";
     private static final String DB_CONNECTION = "jdbc:mysql://"
@@ -127,11 +127,11 @@ public class Database {
      * @param name indicates the name of the Item
      */
     public void insertItem(int testID, String name, BufferedImage image) {
-        String query = "INSERT INTO ITEM (TestID, Name, Image) VALUES (?, ?, ?)";
+        String query = "INSERT INTO ITEM (Name, Image) VALUES (?, ?)";
         try {
             PreparedStatement stmt = mConnection.prepareStatement(query);
-            stmt.setInt(1, testID);
-            stmt.setString(2, name);
+//            stmt.setInt(1, testID);
+            stmt.setString(1, name);
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             InputStream inputStream = null;
@@ -146,7 +146,7 @@ public class Database {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            stmt.setBinaryStream(3, inputStream, length);
+            stmt.setBinaryStream(2, inputStream, length);
 
             stmt.execute();
         } catch (SQLException e) {
@@ -191,15 +191,15 @@ public class Database {
      * @param decision indicates which of the above items user selected (can be "" for neither)
      */
     public void insertMatchUp(int sessionID, int questionNumber, int itemAID, int itemBID, String decision) {
-        String query = "INSERT INTO MATCHUP (SessionID, QNumber, ItemID_A, ItemID_B, Decision)" +
+        String query = "INSERT INTO MATCHUP (QNumber, ItemID_A, ItemID_B, Decision)" +
                 " VALUES (?, ?, ?, ?, ?);";
         try {
             PreparedStatement stmt = mConnection.prepareStatement(query);
-            stmt.setInt(1, sessionID);
-            stmt.setInt(2, questionNumber);
-            stmt.setInt(3, itemAID);
-            stmt.setInt(4, itemBID);
-            stmt.setString(5, decision);
+//            stmt.setInt(1, sessionID);
+            stmt.setInt(1, questionNumber);
+            stmt.setInt(2, itemAID);
+            stmt.setInt(3, itemBID);
+            stmt.setString(4, decision);
             stmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -264,7 +264,7 @@ public class Database {
      */
     public int insertSession(int userID, int testID, String timestamp) {
         String query = "INSERT INTO SESSION (UserID, TestID, Timestamp) " +
-                "VALUES (?, ?, ?); SELECT SCOPE_IDENTITY() AS ID;";
+                "VALUES (?, ?, ?);";
         try {
             PreparedStatement stmt = mConnection.prepareStatement(query);
             stmt.setInt(1, userID);
@@ -334,7 +334,7 @@ public class Database {
      */
     public int insertTest(int id, String testName, String settings) {
         if (id == -1) {
-            String query = "INSERT INTO TEST (Name, Settings) VALUES (?, ?); SELECT SCOPE_IDENTITY() AS ID;";
+            String query = "INSERT INTO TEST (Name, Settings) VALUES (?, ?); SELECT AUTO_INCREMENT() AS ID;";
             try {
                 PreparedStatement stmt = mConnection.prepareStatement(query);
                 stmt.setString(1, testName);
@@ -429,13 +429,14 @@ public class Database {
      */
     public void insertUser(String firstName, String lastName, String email, String password) {
         String query = "INSERT INTO USER_ACCOUNT (Role, FirstName, LastName, Email, Password) " +
-                "VALUES ('User', ?, ?, ?, ?); SELECT SCOPE_IDENTITY() AS ID;";
+                "VALUES ('User', ?, ?, ?, ?);";
         try {
             PreparedStatement stmt = mConnection.prepareStatement(query);
             stmt.setString(1, firstName);
             stmt.setString(2, lastName);
             stmt.setString(3, email);
             stmt.setString(4, password);
+            System.out.println(stmt);
             stmt.executeUpdate();
             System.out.println("Account successfully created");
         } catch (SQLException e) {
