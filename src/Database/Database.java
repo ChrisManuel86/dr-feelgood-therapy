@@ -31,6 +31,8 @@ import static java.sql.DriverManager.*;
  * - Changed SqlServer driver to MySql driver
  * - Updated DB_SERVER variable to point to localhost sql server
  * - Update SQL code to be compatible with mysql
+ * ##TODO -
+ * -- Refactor SQL to utilize SQL lite syntax as opposed to MS SQL
  */
 public class Database {
     // Final Database Strings
