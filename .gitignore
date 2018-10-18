@@ -1,5 +1,6 @@
 # Compiled class file
 *.class
+src/Database/database.jar
 
 # Log file
 *.log
