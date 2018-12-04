@@ -51,7 +51,7 @@ public class DevMenuForm {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                createTestGUI(1011);
+                createTestGUI(1);
             }
         });
         resultReportingButton.addMouseListener(new MouseAdapter() {
