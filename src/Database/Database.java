@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import static java.sql.DriverManager.*;
+import Database.DBInfo;
 
 
 /**
@@ -35,13 +36,14 @@ import static java.sql.DriverManager.*;
  * -- Refactor SQL to utilize SQL lite syntax as opposed to MS SQL
  */
 public class Database {
+    private static DBInfo dbInfo;
+    private final static String DB_SERVER = dbInfo.getDBServer();
+    private final static String DATABASE = dbInfo.getDatabase();
+    private final static String DB_USERNAME = dbInfo.getDBUsername();
+    private final static String DB_PASSWORD = dbInfo.getDBPasword();
+
     // Final Database Strings
-    private static final String DB_SERVER = "onijee.minecraftnoob.com:3306";
-    private static final String DATABASE = "dr_feelgood";
-    private static final String DB_USERNAME = "feelgood_admin";
-    private static final String DB_PASSWORD = "5u2f4tNoRZEm97za";
-    private static final String DB_CONNECTION = "jdbc:mysql://"
-            + DB_SERVER + "/" + DATABASE + "?user=" + DB_USERNAME + "&password=" + DB_PASSWORD;
+    private static final String DB_CONNECTION = "jdbc:mysql://" + DB_SERVER + "/" + DATABASE + "?user=" + DB_USERNAME + "&password=" + DB_PASSWORD;
     // Private variables
     private Connection mConnection = null;
 

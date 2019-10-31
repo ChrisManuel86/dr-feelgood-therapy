@@ -1,6 +1,6 @@
 # Compiled class file
 *.class
-src/Database/database.jar
+src/Database/DBInfo.java
 
 # Log file
 *.log
@@ -26,3 +26,6 @@ hs_err_pid*
 ./.idea
 ./out
 *.iml
+
+# VSCode Files / Folders
+.vscode
