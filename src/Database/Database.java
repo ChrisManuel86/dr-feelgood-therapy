@@ -36,14 +36,16 @@ import Database.DBInfo;
  * -- Refactor SQL to utilize SQL lite syntax as opposed to MS SQL
  */
 public class Database {
-    private static DBInfo dbInfo;
-    private final static String DB_SERVER = dbInfo.getDBServer();
-    private final static String DATABASE = dbInfo.getDatabase();
-    private final static String DB_USERNAME = dbInfo.getDBUsername();
-    private final static String DB_PASSWORD = dbInfo.getDBPasword();
+    private static DBInfo dbinfo =  new DBInfo();
+
+    private final static String DB_SERVER = dbinfo.getDBServer();
+    private final static String DATABASE = dbinfo.getDatabase();
+    private final static String DB_USERNAME = dbinfo.getDBUsername();
+    private final static String DB_PASSWORD = dbinfo.getDBPassword();
 
     // Final Database Strings
     private static final String DB_CONNECTION = "jdbc:mysql://" + DB_SERVER + "/" + DATABASE + "?user=" + DB_USERNAME + "&password=" + DB_PASSWORD;
+
     // Private variables
     private Connection mConnection = null;
 
