@@ -36,15 +36,15 @@ import Database.DBInfo;
  * -- Refactor SQL to utilize SQL lite syntax as opposed to MS SQL
  */
 public class Database {
-    private static DBInfo dbinfo =  new DBInfo();
+    private final static DBInfo dbinfo = new DBInfo();
 
-    private final static String DB_SERVER = dbinfo.getDBServer();
-    private final static String DATABASE = dbinfo.getDatabase();
-    private final static String DB_USERNAME = dbinfo.getDBUsername();
-    private final static String DB_PASSWORD = dbinfo.getDBPassword();
+    private final static String DB_HOSTNAME = dbinfo.getDB_HOSTNAME();
+    private final static String DATABASE = dbinfo.getDATABASE();
+    private final static String DB_USERNAME = dbinfo.getDB_USERNAME();
+    private final static String DB_PASSWORD = dbinfo.getDB_PASSWORD();
 
     // Final Database Strings
-    private static final String DB_CONNECTION = "jdbc:mysql://" + DB_SERVER + "/" + DATABASE + "?user=" + DB_USERNAME + "&password=" + DB_PASSWORD;
+    private static final String DB_CONNECTION = "jdbc:mysql://" + DB_HOSTNAME + "/" + DATABASE + "?user=" + DB_USERNAME + "&password=" + DB_PASSWORD + "&serverTimezone=PST";
 
     // Private variables
     private Connection mConnection = null;
@@ -62,7 +62,7 @@ public class Database {
      * @return Item item
      */
     private Item getItemByItemID(int itemID) {
-        String itemQuery = "SELECT * FROM ITEM WHERE ItemID = ?;";
+        String itemQuery = "SELECT * FROM item WHERE ItemID = ?;";
         ArrayList<Item> items = new ArrayList<>();
         try {
             PreparedStatement stmt = mConnection.prepareStatement(itemQuery);
@@ -96,7 +96,7 @@ public class Database {
      * @return ArrayList items
      */
     public ArrayList<Item> getItemsByTestID(int testID) {
-        String itemQuery = "SELECT * FROM ITEM WHERE TestID = ?;";
+        String itemQuery = "SELECT * FROM item WHERE TestID = ?;";
         ArrayList<Item> items = new ArrayList<>();
         try {
             PreparedStatement stmt = mConnection.prepareStatement(itemQuery);
@@ -131,7 +131,7 @@ public class Database {
      * @param name indicates the name of the Item
      */
     public void insertItem(int testID, String name, BufferedImage image) {
-        String query = "INSERT INTO ITEM (TestId, Name, Image) VALUES (?, ?, ?)";
+        String query = "INSERT INTO item (TestId, Name, Image) VALUES (?, ?, ?)";
         try {
             PreparedStatement stmt = mConnection.prepareStatement(query);
 //            stmt.setInt(1, testID);
@@ -167,7 +167,7 @@ public class Database {
      */
     public ArrayList<MatchUp> getMatchUps(int sessionID) {
         String itemsQuery = "SELECT QNumber, ItemID_A, ItemID_B, IFNULL(Decision,'')" +
-                " AS Decision FROM MATCHUP WHERE SessionID = ?;";
+                " AS Decision FROM matchup WHERE SessionID = ?;";
         ArrayList<MatchUp> matchUps = new ArrayList<>();
         try {
             PreparedStatement stmt = mConnection.prepareStatement(itemsQuery);
@@ -196,7 +196,7 @@ public class Database {
      * @param decision indicates which of the above items user selected (can be "" for neither)
      */
     public void insertMatchUp(int sessionID, int questionNumber, int itemAID, int itemBID, String decision) {
-        String query = "INSERT INTO MATCHUP (QNumber, ItemID_A, ItemID_B, Decision)" +
+        String query = "INSERT INTO matchup (QNumber, ItemID_A, ItemID_B, Decision)" +
                 " VALUES (?, ?, ?, ?, ?);";
         try {
             PreparedStatement stmt = mConnection.prepareStatement(query);
@@ -218,7 +218,7 @@ public class Database {
      * @return ArrayList sessions
      */
     public ArrayList<Session> getSessionsByTestID(int testID) {
-        String sessionQuery = "SELECT * FROM SESSION WHERE TestID = ? ORDER BY Timestamp;";
+        String sessionQuery = "SELECT * FROM session WHERE TestID = ? ORDER BY Timestamp;";
         ArrayList<Session> sessions = new ArrayList<>();
         try {
             PreparedStatement stmt = mConnection.prepareStatement(sessionQuery);
@@ -243,7 +243,7 @@ public class Database {
      * @return ArrayList sessions
      */
     public ArrayList<Session> getSessionsByUserID(int userID) {
-        String sessionQuery = "SELECT * FROM SESSION WHERE UserID = ? ORDER BY Timestamp;";
+        String sessionQuery = "SELECT * FROM session WHERE UserID = ? ORDER BY Timestamp;";
         ArrayList<Session> sessions = new ArrayList<>();
         try {
             PreparedStatement stmt = mConnection.prepareStatement(sessionQuery);
@@ -269,7 +269,7 @@ public class Database {
      * @param timestamp indicates date and time of Test completion
      */
     public int insertSession(int userID, int testID, String timestamp) {
-        String query = "INSERT INTO SESSION (UserID, TestID, Timestamp) " +
+        String query = "INSERT INTO session (UserID, TestID, Timestamp) " +
                 "VALUES (?, ?, ?);";
         try {
             PreparedStatement stmt = mConnection.prepareStatement(query);
@@ -292,7 +292,7 @@ public class Database {
      * @return ArrayList test
      */
     public ArrayList<Test> getTests() {
-        String testQuery = "SELECT * FROM TEST ORDER BY Name";
+        String testQuery = "SELECT * FROM test ORDER BY Name";
         ArrayList<Test> tests = new ArrayList<>();
         try {
             PreparedStatement stmt = mConnection.prepareStatement(testQuery);
@@ -314,8 +314,8 @@ public class Database {
      * @return ArrayList test
      */
     public ArrayList<Test> getTestsByUser(int userID) {
-        String testQuery = "SELECT DISTINCT TEST.TestID, Name FROM TEST " +
-                "JOIN SESSION ON (TEST.TestID = SESSION.TestID) WHERE UserID = ? ORDER BY Name;";
+        String testQuery = "SELECT DISTINCT test.TestID, Name FROM test " +
+                "JOIN session ON (test.TestID = session.TestID) WHERE UserID = ? ORDER BY Name;";
         ArrayList<Test> tests = new ArrayList<>();
         try {
             PreparedStatement stmt = mConnection.prepareStatement(testQuery);
@@ -340,7 +340,7 @@ public class Database {
      */
     public int insertTest(int id, String testName, String settings) {
         if (id == -1) {
-            String query = "INSERT INTO TEST (Name, Settings) VALUES (?, ?); SELECT AUTO_INCREMENT() AS ID;";
+            String query = "INSERT INTO test (Name, Settings) VALUES (?, ?); SELECT AUTO_INCREMENT() AS ID;";
             try {
                 PreparedStatement stmt = mConnection.prepareStatement(query);
                 stmt.setString(1, testName);
@@ -353,7 +353,7 @@ public class Database {
                 e.printStackTrace();
             }
         } else {
-            String query = "UPDATE TEST SET Settings = ? WHERE TestID = ?;";
+            String query = "UPDATE test SET Settings = ? WHERE TestID = ?;";
             try {
                 PreparedStatement stmt = mConnection.prepareStatement(query);
                 stmt.setString(1, settings);
@@ -376,7 +376,7 @@ public class Database {
      * @return User user
      */
     public User getUserByEmail(String email) {
-        String emailQuery = "SELECT * FROM USER_ACCOUNT WHERE Email = ?;";
+        String emailQuery = "SELECT * FROM user_account WHERE Email = ?;";
         ArrayList<User> users = new ArrayList<>();
         try {
             PreparedStatement stmt = mConnection.prepareStatement(emailQuery);
@@ -405,8 +405,8 @@ public class Database {
      * @return ArrayList users
      */
     public ArrayList<User> getUsersWithSessions() {
-        String userQuery = "SELECT DISTINCT USER_ACCOUNT.UserID, FirstName, LastName, Email " +
-                "FROM USER_ACCOUNT JOIN SESSION ON (USER_ACCOUNT.UserID = SESSION.UserID) " +
+        String userQuery = "SELECT DISTINCT user_account.UserID, FirstName, LastName, Email " +
+                "FROM user_account JOIN session ON (user_account.UserID = session.UserID) " +
                 "WHERE Role = 'User' ORDER BY LastName, FirstName, Email;";
         ArrayList<User> users = new ArrayList<>();
         try {
@@ -434,7 +434,7 @@ public class Database {
      * @param password Password of new User
      */
     public void insertUser(String firstName, String lastName, String email, String password) {
-        String query = "INSERT INTO USER_ACCOUNT (Role, FirstName, LastName, Email, Password) " +
+        String query = "INSERT INTO user_account (Role, FirstName, LastName, Email, Password) " +
                 "VALUES ('User', ?, ?, ?, ?);";
         try {
             PreparedStatement stmt = mConnection.prepareStatement(query);
@@ -477,8 +477,8 @@ public class Database {
     }
 
     public void deleteFromDatabase(String table, int id) {
-        String criteria = table.toUpperCase().equals("MATCHUP") ? "SessionID" : "TestID";
-        String deleteQuery = "DELETE FROM " + table.toUpperCase() + " WHERE " + criteria + " = ?";
+        String criteria = table.toLowerCase().equals("matchup") ? "SessionID" : "TestID";
+        String deleteQuery = "DELETE FROM " + table.toLowerCase() + " WHERE " + criteria + " = ?";
         try {
             PreparedStatement stmt = mConnection.prepareStatement(deleteQuery);
             stmt.setInt(1, id);
