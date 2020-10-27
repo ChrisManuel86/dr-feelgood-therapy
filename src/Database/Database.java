@@ -13,13 +13,13 @@ import Database.DBInfo;
 
 
 /**
- * ResultsDB
+ * Database
  * <p>
  * Class used for communicating with database, and for placing items
  * into arrays and then passing that information to the form(s).
  *
  * @author Brooke Higgins, Christopher Manuel, Leron Tolmachev, and Luke Kyser
- * @version 2017.11.29
+ * @version 2020.10.25
  *
  * Change Log:
  * - Refactored Project after Sprint One
@@ -32,8 +32,7 @@ import Database.DBInfo;
  * - Changed SqlServer driver to MySql driver
  * - Updated DB_SERVER variable to point to localhost sql server
  * - Update SQL code to be compatible with mysql
- * ##TODO -
- * -- Refactor SQL to utilize SQL lite syntax as opposed to MS SQL
+ * - Refactored SQL to utilize SQL lite syntax as opposed to MS SQL
  */
 public class Database {
     private final static DBInfo dbinfo = new DBInfo();
@@ -44,7 +43,8 @@ public class Database {
     private final static String DB_PASSWORD = dbinfo.getDB_PASSWORD();
 
     // Final Database Strings
-    private static final String DB_CONNECTION = "jdbc:mysql://" + DB_HOSTNAME + "/" + DATABASE + "?user=" + DB_USERNAME + "&password=" + DB_PASSWORD + "&serverTimezone=PST";
+    private static final String DB_CONNECTION = "jdbc:mysql://" + DB_HOSTNAME + "/" + DATABASE + "?user=" + DB_USERNAME
+            + "&password=" + DB_PASSWORD + "&serverTimezone=PST";
 
     // Private variables
     private Connection mConnection = null;

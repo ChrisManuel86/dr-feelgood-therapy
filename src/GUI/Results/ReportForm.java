@@ -13,6 +13,7 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static Resources.Constants.BUSINESS_NAME;
 
@@ -73,23 +74,23 @@ public class ReportForm {
         this.report = new Report();
 
         // Prepare JComboBoxes
-
         UIManager.put("ComboBox.disabledForeground", Color.DARK_GRAY);
+
         tabbedPane.setVisible(false);
 
-        findUserComboBox.setFont(new Font("Monospaced", Font.BOLD, 12));
+//        findUserComboBox.setFont(new Font("Monospaced", Font.BOLD, 12));
         findUserComboBox.setActionCommand("User");
         findUserComboBox.addItem(new User(-1, null, null, null, null, null));
         for(User user : report.getUsers()) {
             findUserComboBox.addItem(user);
         }
         int itemCount = findUserComboBox.getItemCount();
-        findUserComboBox.setMaximumRowCount(itemCount >= 15 ? 15 : itemCount);
-        findTestComboBox.setFont(new Font("Monospaced", Font.BOLD, 12));
+        findUserComboBox.setMaximumRowCount(Math.min(itemCount, 15));
+//        findTestComboBox.setFont(new Font("Monospaced", Font.BOLD, 12));
         findTestComboBox.setActionCommand("Test");
         findTestComboBox.setEnabled(false);
 
-        findSessionComboBox.setFont(new Font("Monospaced", Font.BOLD, 12));
+//        findSessionComboBox.setFont(new Font("Monospaced", Font.BOLD, 12));
         findSessionComboBox.setActionCommand("Session");
         findSessionComboBox.setEnabled(false);
         findSessionComboBox.getColorModel();
@@ -259,7 +260,7 @@ public class ReportForm {
                 findSessionComboBox.removeActionListener(selectObject);
                 findSessionComboBox.removeAllItems();
                 findSessionComboBox.addActionListener(selectObject);
-                report.generateSessions((User) findUserComboBox.getSelectedItem());
+                report.generateSessions((User) Objects.requireNonNull(findUserComboBox.getSelectedItem()));
                 ArrayList<Test> tests = report.getTests();
                 findTestComboBox.addItem(new Test(-1, null, null));
                 for (Test test : tests) {
@@ -297,7 +298,7 @@ public class ReportForm {
             comboBox.setSelectedIndex(0);
             comboBox.setEnabled(true);
             int itemCount = comboBox.getItemCount();
-            comboBox.setMaximumRowCount(itemCount >= 15 ? 15 : itemCount);
+            comboBox.setMaximumRowCount(Math.min(itemCount, 15));
         }
     }
 

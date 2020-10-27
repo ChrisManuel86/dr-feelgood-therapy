@@ -22,6 +22,13 @@ class Main {
      */
     public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(Main::createGUI);
+        try {
+            // Set System L&F
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+            // handle exception
+        }
     }
 
     /**
