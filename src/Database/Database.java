@@ -14,7 +14,7 @@ import Database.DBInfo;
 
 /**
  * Database
- * <p>
+ * 
  * Class used for communicating with database, and for placing items
  * into arrays and then passing that information to the form(s).
  *
@@ -34,6 +34,7 @@ import Database.DBInfo;
  * - Update SQL code to be compatible with mysql
  * - Refactored SQL to utilize SQL lite syntax as opposed to MS SQL
  */
+ 
 public class Database {
     private final static DBInfo dbinfo = new DBInfo();
 
@@ -134,7 +135,6 @@ public class Database {
         String query = "INSERT INTO item (TestId, Name, Image) VALUES (?, ?, ?)";
         try {
             PreparedStatement stmt = mConnection.prepareStatement(query);
-//            stmt.setInt(1, testID);
             stmt.setInt(1, testID);
             stmt.setString(2, name);
 
@@ -200,7 +200,6 @@ public class Database {
                 " VALUES (?, ?, ?, ?, ?);";
         try {
             PreparedStatement stmt = mConnection.prepareStatement(query);
-//            stmt.setInt(1, sessionID);
             stmt.setInt(1, sessionID);
             stmt.setInt(2, questionNumber);
             stmt.setInt(3, itemAID);
