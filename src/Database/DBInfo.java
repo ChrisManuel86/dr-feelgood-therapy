@@ -1,11 +1,9 @@
 package Database;
 
-import java.awt.image.BufferedImage;
-
 /**
  * DBInfo
  * 
- * DBInfo class for storing all database host/login informatoin
+ * DBInfo class for storing all database login information
  *
  * @author Christopher Manuel
  * @version 2021.11.08
@@ -13,6 +11,7 @@ import java.awt.image.BufferedImage;
  * Change Log:
  * - Initial version
  */
+
 public class DBInfo{
     private final static String DB_HOSTNAME;
     private final static String DATABASE;
@@ -20,138 +19,48 @@ public class DBInfo{
     private final static String DB_PASSWORD;
 
     /**
-     * Constructor for Item class
-     *
-     * @param itemID   unique identifier for each Item
-     * @param itemName name of Item to be displayed to user
-     * @param testID   Test with which Item is associated
+     * Constructor for DBInfo class
      */
     public DBInfo() {
         this.DB_HOSTNAME = "[placeholder]";
-        this.DATABASE = "[placeholder]";
-        this.DB_USERNAME = "[placeholder]"
+        this.DB_SERVER   = "[placeholder]";
+        this.DB_USERNAME = "[placeholder]";
         this.DB_PASSWORD = "[placeholder]";
-        
     }
 
     /**
-     * Access Item's id field
+     * Access Database hostname
      *
-     * @return int Item ID
+     * @return String DB_HOSTNAME
      */
     public int getDB_HOSTNAME() {
-        return id;
+        return DB_HOSTNAME;
     }
 
     /**
-     * Access Item's losses field
+     * Access Database name
      *
-     * @return int losses
+     * @return String DATABASE
      */
     public int getDATABASE() {
-        return losses;
+        return DATABASE;
     }
-
+    
     /**
-     * Mutate Item's losses field
+     * Access Database username
      *
-     * @param losses sum of how many times preference was given to another item
-     */
-    public void setLosses(int losses) {
-        this.losses = losses;
-    }
-
-    /**
-     * Access Item's name field
-     *
-     * @return int Item name
+     * @return String DB_USERNAME
      */
     public String getDB_USERNAME() {
-        return name;
+        return DB_USERNAME;
     }
 
     /**
-     * Access Item's score field
+     * Access Database password
      *
-     * @return int score
+     * @return String DB_PASSWORD
      */
-    public int getScore() {
-        return score;
-    }
-
-    /**
-     * Mutate Item's score field
-     *
-     * @param score sum of Item's wins, ties, and losses
-     */
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    /**
-     * Access Item's ties field
-     *
-     * @return int ties
-     */
-    public int getTies() {
-        return ties;
-    }
-
-    /**
-     * Mutate Item's ties field
-     *
-     * @param ties sum of how many times no preference was given
-     */
-    public void setTies(int ties) {
-        this.ties = ties;
-    }
-
-    /**
-     * Access Item's wins field
-     *
-     * @return int wins
-     */
-    public int getWins() {
-        return wins;
-    }
-
-    /**
-     * Mutate Item's wins field
-     *
-     * @param wins sum of times preference was given to Item
-     */
-    public void setWins(int wins) {
-        this.wins = wins;
-    }
-
-    /**
-     * Access Item's image field
-     *
-     * @return BufferedImage image
-     */
-    public BufferedImage getImage() {
-        return image;
-    }
-
-    /**
-     * Mutate Item's image field
-     *
-     * @param image Image to be displayed along with Item
-     */
-    public void setImage(BufferedImage image) { this.image = image; }
-
-    // Allows item array to be sorted by score
-    @Override
-    public int compareTo(Item compareItem) {
-
-        int compareScore = compareItem.getScore();
-
-        return compareScore - this.getScore();
-    }
-
-    //Formatting to appropriately display Items in JLists and JComboBoxes.
-    @Override
-    public String toString() {
-        return getName() == null ? "Select an Item..." : getName();
+    public int getPassword() {
+        return DB_PASSWORD;
     }
 }

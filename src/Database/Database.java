@@ -19,7 +19,7 @@ import Database.DBInfo;
  * into arrays and then passing that information to the form(s).
  *
  * @author Brooke Higgins, Christopher Manuel, Leron Tolmachev, and Luke Kyser
- * @version 2020.10.25
+ * @version 2021.11.08
  *
  * Change Log:
  * - Refactored Project after Sprint One
@@ -39,13 +39,12 @@ public class Database {
     private final static DBInfo dbinfo = new DBInfo();
 
     private final static String DB_HOSTNAME = dbinfo.getDB_HOSTNAME();
-    private final static String DATABASE = dbinfo.getDATABASE();
+    private final static String DATABASE    = dbinfo.getDATABASE();
     private final static String DB_USERNAME = dbinfo.getDB_USERNAME();
     private final static String DB_PASSWORD = dbinfo.getDB_PASSWORD();
 
     // Final Database Strings
-    private static final String DB_CONNECTION = "jdbc:mysql://" + DB_HOSTNAME + "/" + DATABASE + "?user=" + DB_USERNAME
-            + "&password=" + DB_PASSWORD + "&serverTimezone=PST";
+    private static final String DB_CONNECTION = "jdbc:mysql://" + DB_HOSTNAME + "/" + DATABASE + "?user=" + DB_USERNAME + "&password=" + DB_PASSWORD + "&serverTimezone=PST";
 
     // Private variables
     private Connection mConnection = null;
@@ -60,6 +59,7 @@ public class Database {
     /**
      * Retrieve a single Item from Database whose ItemID matches the parameter
      *
+     * @param int itemID
      * @return Item item
      */
     private Item getItemByItemID(int itemID) {
@@ -94,6 +94,7 @@ public class Database {
     /**
      * Retrieve all Items from Database whose TestID matches the parameter
      *
+     * @param int testID
      * @return ArrayList items
      */
     public ArrayList<Item> getItemsByTestID(int testID) {
@@ -128,8 +129,8 @@ public class Database {
     /**
      * Insert Item object into the Database's ITEM table
      *
-     * @param testID indicates which Test an Item belongs to
-     * @param name indicates the name of the Item
+     * @param int testID indicates which Test an Item belongs to
+     * @param String name indicates the name of the Item
      */
     public void insertItem(int testID, String name, BufferedImage image) {
         String query = "INSERT INTO item (TestId, Name, Image) VALUES (?, ?, ?)";
@@ -162,7 +163,7 @@ public class Database {
     /**
      * Retrieve all MatchUps from Database whose SessionID matches the parameter
      *
-     * @param sessionID indicates the Session with which all desired MatchUps are associated
+     * @param int sessionID indicates the Session with which all desired MatchUps are associated
      * @return ArrayList matchUps
      */
     public ArrayList<MatchUp> getMatchUps(int sessionID) {
@@ -189,11 +190,11 @@ public class Database {
     /**
      * Insert MatchUp object into the Database's MATCHUP table
      *
-     * @param sessionID indicates which Session a MatchUp belongs to
-     * @param questionNumber indicates order in which MatchUp was presented to user
-     * @param itemAID indicates item presented on Left side of test form
-     * @param itemBID indicates item presented on Right side of test form
-     * @param decision indicates which of the above items user selected (can be "" for neither)
+     * @param int sessionID indicates which Session a MatchUp belongs to
+     * @param int questionNumber indicates order in which MatchUp was presented to user
+     * @param int itemAID indicates item presented on Left side of test form
+     * @param int itemBID indicates item presented on Right side of test form
+     * @param String decision indicates which of the above items user selected (can be "" for neither)
      */
     public void insertMatchUp(int sessionID, int questionNumber, int itemAID, int itemBID, String decision) {
         String query = "INSERT INTO matchup (QNumber, ItemID_A, ItemID_B, Decision)" +
@@ -214,6 +215,7 @@ public class Database {
     /**
      * Retrieve all Sessions from Database whose TestID matches the parameter
      *
+     * @param int testID
      * @return ArrayList sessions
      */
     public ArrayList<Session> getSessionsByTestID(int testID) {
@@ -238,7 +240,7 @@ public class Database {
     /**
      * Retrieves all Sessions from Database whose UserID matches the parameter
      *
-     * @param userID int representing userID of desired Session
+     * @param int userID int representing userID of desired Session
      * @return ArrayList sessions
      */
     public ArrayList<Session> getSessionsByUserID(int userID) {
@@ -263,9 +265,9 @@ public class Database {
     /**
      * Insert Session object into the Database's SESSION table
      *
-     * @param userID indicates which User completed the Test
-     * @param testID indicates which Test User completed
-     * @param timestamp indicates date and time of Test completion
+     * @param int userID indicates which User completed the Test
+     * @param int testID indicates which Test User completed
+     * @param String timestamp indicates date and time of Test completion
      */
     public int insertSession(int userID, int testID, String timestamp) {
         String query = "INSERT INTO session (UserID, TestID, Timestamp) " +
@@ -310,6 +312,7 @@ public class Database {
     /**
      * Retrieves Names and IDs of all Tests taken by a specific User from Database
      *
+     * @param int userID
      * @return ArrayList test
      */
     public ArrayList<Test> getTestsByUser(int userID) {
@@ -334,7 +337,7 @@ public class Database {
     /**
      * Insert Test object into Database's TEST table
      *
-     * @param testName name of the Test
+     * @param String testName name of the Test
      * @return int testID
      */
     public int insertTest(int id, String testName, String settings) {
@@ -371,7 +374,7 @@ public class Database {
     /**
      * Retrieve a single User from Database whose Email matches the parameter
      *
-     * @param email String representing Email address of desired user
+     * @param String email String representing Email address of desired user
      * @return User user
      */
     public User getUserByEmail(String email) {
@@ -427,10 +430,10 @@ public class Database {
     /**
      * Insert User object the Database's USER_ACCOUNT table
      *
-     * @param firstName First name of new User
-     * @param lastName Last name of new User
-     * @param email Email address of new User
-     * @param password Password of new User
+     * @param String firstName First name of new User
+     * @param String lastName Last name of new User
+     * @param String email Email address of new User
+     * @param String password Password of new User
      */
     public void insertUser(String firstName, String lastName, String email, String password) {
         String query = "INSERT INTO user_account (Role, FirstName, LastName, Email, Password) " +
@@ -475,6 +478,12 @@ public class Database {
         }
     }
 
+    /**
+    * Remove test from database
+    * 
+    * @param String table
+    * @param int testID
+    */
     public void deleteFromDatabase(String table, int id) {
         String criteria = table.toLowerCase().equals("matchup") ? "SessionID" : "TestID";
         String deleteQuery = "DELETE FROM " + table.toLowerCase() + " WHERE " + criteria + " = ?";
