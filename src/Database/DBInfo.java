@@ -22,9 +22,9 @@ public class DBInfo{
      * Constructor for DBInfo class
      */
     public DBInfo() {
-        this.DB_HOSTNAME = "[placeholder]";
-        this.DB_SERVER   = "[placeholder]";
-        this.DB_USERNAME = "[placeholder]";
+        this.DB_HOSTNAME = "onilynx69.live:3360";
+        this.DB_SERVER   = "feelgood_therapy_[unique-server-string]";
+        this.DB_USERNAME = "feelgood_admin";
         this.DB_PASSWORD = "[placeholder]";
     }
 
