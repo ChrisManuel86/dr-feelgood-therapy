@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import static java.sql.DriverManager.*;
-import Database.DBInfo;
 
 
 /**
