@@ -1,6 +1,5 @@
 # Compiled class file
-*.class
-src/Database/DBInfo.java
+DBInfo.*
 
 # Log file
 *.log
@@ -24,7 +23,6 @@ hs_err_pid*
 
 # IntelliJ Files / Folders
 ./.idea
-./out
 *.iml
 
 # VSCode Files / Folders

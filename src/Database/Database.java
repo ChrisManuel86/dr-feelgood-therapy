@@ -13,12 +13,12 @@ import static java.sql.DriverManager.*;
 
 /**
  * Database
- * 
+ * <p>
  * Class used for communicating with database, and for placing items
  * into arrays and then passing that information to the form(s).
  *
  * @author Brooke Higgins, Christopher Manuel, Leron Tolmachev, and Luke Kyser
- * @version 2021.11.08
+ * @version 2022.08.03
  *
  * Change Log:
  * - Refactored Project after Sprint One
@@ -32,6 +32,7 @@ import static java.sql.DriverManager.*;
  * - Updated DB_SERVER variable to point to localhost sql server
  * - Update SQL code to be compatible with mysql
  * - Refactored SQL to utilize SQL lite syntax as opposed to MS SQL
+ * - Corrected error in insertMatchup method
  */
  
 public class Database {
@@ -43,7 +44,7 @@ public class Database {
     private final static String DB_PASSWORD = dbinfo.getDB_PASSWORD();
 
     // Final Database Strings
-    private static final String DB_CONNECTION = "jdbc:mysql://" + DB_HOSTNAME + "/" + DATABASE + "?user=" + DB_USERNAME + "&password=" + DB_PASSWORD + "&serverTimezone=PST";
+    private static final String DB_CONNECTION = "jdbc:mysql://" + DB_HOSTNAME + "/" + DATABASE + "?user=" + DB_USERNAME + "&password=" + DB_PASSWORD;
 
     // Private variables
     private Connection mConnection = null;
@@ -196,7 +197,7 @@ public class Database {
      * @param String decision indicates which of the above items user selected (can be "" for neither)
      */
     public void insertMatchUp(int sessionID, int questionNumber, int itemAID, int itemBID, String decision) {
-        String query = "INSERT INTO matchup (QNumber, ItemID_A, ItemID_B, Decision)" +
+        String query = "INSERT INTO matchup (SessionID, QNumber, ItemID_A, ItemID_B, Decision)" +
                 " VALUES (?, ?, ?, ?, ?);";
         try {
             PreparedStatement stmt = mConnection.prepareStatement(query);
@@ -484,7 +485,7 @@ public class Database {
     * @param int testID
     */
     public void deleteFromDatabase(String table, int id) {
-        String criteria = table.toLowerCase().equals("matchup") ? "SessionID" : "TestID";
+        String criteria = table.equalsIgnoreCase("matchup") ? "SessionID" : "TestID";
         String deleteQuery = "DELETE FROM " + table.toLowerCase() + " WHERE " + criteria + " = ?";
         try {
             PreparedStatement stmt = mConnection.prepareStatement(deleteQuery);
