@@ -1,6 +1,8 @@
 import GUI.DevMenuForm;
 
 import javax.swing.*;
+import javafx.*;
+
 /**
  * UserLoginMain
  *
@@ -9,9 +11,9 @@ import javax.swing.*;
  * @author Leron Tolmachev
  * @version 2017.11.11
  *
- * Change Log:
- * - Refactored Project after Sprint One
- * -
+ *          Change Log:
+ *          - Refactored Project after Sprint One
+ *          -
  */
 class Main {
 
@@ -25,8 +27,8 @@ class Main {
         try {
             // Set System L&F
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+        } catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException
+                | ClassNotFoundException e) {
             // handle exception
         }
     }
@@ -42,6 +44,5 @@ class Main {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-
 
 }

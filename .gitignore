@@ -27,3 +27,6 @@ hs_err_pid*
 
 # VSCode Files / Folders
 .vscode
+
+# include javafx files
+!javafx*.jar
