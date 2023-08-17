@@ -11,8 +11,21 @@ import Logic.Setup.TestSetup;
 import Logic.Testing.TestSession;
 
 import javax.swing.*;
+import javax.swing.plaf.ComponentUI;
+import java.awt.*;
 
-public class MainGUI {
+/**
+ * MainGUI
+ * Main GUI class responsible for creating frames for all sections of the program
+ *
+ * @Author Leron Tolmachev, Christopher Manuel
+ * @Version 2023.08.17
+ * <p>
+ * Change log:
+ * - Refactored project, removing deprecated java calls
+ */
+
+public class MainGUI extends JPanel {
 
     private static final LoginAttempt loginAttempt = new LoginAttempt();
     private static JFrame frame = new JFrame();
@@ -56,31 +69,31 @@ public class MainGUI {
      * Toggles JFrame content between Login and CreateAccount Forms
      */
     public static void changeSetupGUI(TestSetup testSetup, Object form) {
-//        JFrame customizeFrame = new JFrame(frame.getTitle());
+        JFrame customizeFrame = new JFrame(frame.getTitle());
         SetupForm setupForm = (SetupForm) form;
         frame.getContentPane().removeAll();
-        if(customizing) {
+        if (customizing) {
             customizing = false;
             frame.getContentPane().add(setupForm.getRootPanel());
-//            frame.setVisible(true);
-//            frame.setLocationRelativeTo(customizeFrame);
-//            frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);
-//            frame.validate();
-//            frame.repaint();
-//            frame.pack();
-//            frame.getContentPane().setVisible(true);
-//            customizeFrame.dispose();
+            frame.setVisible(true);
+            frame.setLocationRelativeTo(customizeFrame);
+            frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);
+            frame.validate();
+            frame.repaint();
+            frame.pack();
+            frame.getContentPane().setVisible(true);
+            customizeFrame.dispose();
         } else {
             customizing = true;
             frame.getContentPane().add(new CustomizeForm(testSetup, frame).getRootPanel());
-//            customizeFrame.getContentPane().removeAll();
-//            customizeFrame.getContentPane().add(new CustomizeForm(testSetup, frame).getRootPanel());
-//            customizeFrame.setLocationRelativeTo(frame);
-//            frame.setVisible(false);
-//            customizeFrame.validate();
-//            customizeFrame.repaint();
-//            customizeFrame.pack();
-//            customizeFrame.dispose();
+            customizeFrame.getContentPane().removeAll();
+            customizeFrame.getContentPane().add(new CustomizeForm(testSetup, frame).getRootPanel());
+            customizeFrame.setLocationRelativeTo(frame);
+            frame.setVisible(false);
+            customizeFrame.validate();
+            customizeFrame.repaint();
+            customizeFrame.pack();
+            customizeFrame.dispose();
         }
         frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);
         frame.validate();
@@ -104,9 +117,9 @@ public class MainGUI {
     /**
      * Toggles JFrame content between Login and CreateAccount Forms
      */
-    public static void changeLoginGUI () {
+    public static void changeLoginGUI() {
         frame.getContentPane().removeAll();
-        if(registering) {
+        if (registering) {
             registering = false;
             frame.getContentPane().add(new LoginForm(loginAttempt, frame).getRootPanel());
         } else {

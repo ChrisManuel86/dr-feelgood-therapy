@@ -5,14 +5,15 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Session
- *
  * A class to represent a record within the Database's SESSION table
  *
  * @author Leron Tolmachev, Christopher Manuel
- * @version 2017.12.02
- *
+ * @version 2023.08.17
+ * <p>
  * Change Log:
  * - Refactored Project after Sprint One
+ * - Refactored project, removing deprecated java calls
+ * - General code cleanup
  */
 public class Session {
     private final int sessionID;
@@ -24,8 +25,8 @@ public class Session {
      * Constructor for Session Class
      *
      * @param sessionID unique identifier for this Session
-     * @param userID identifies which User completed this Session
-     * @param testID identifies Test with which this Session is associated
+     * @param userID    identifies which User completed this Session
+     * @param testID    identifies Test with which this Session is associated
      * @param timestamp identifies date and time at which Session was completed
      */
     public Session(int sessionID, int userID, int testID, String timestamp) {
@@ -66,8 +67,8 @@ public class Session {
      * Mutate TestSessions's timestamp field to current datetime
      */
     public void setTimestamp() {
-            this.timestamp = String.valueOf(LocalDateTime.now()
-                    .format(DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss a")));
+        this.timestamp = LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss a"));
     }
 
     /**
@@ -81,5 +82,7 @@ public class Session {
 
     //Formatting to appropriately display Session Times in JLists and JComboBoxes.
     @Override
-    public String toString() { return getTimestamp() == null ? "Select a Session Date..." : getTimestamp(); }
+    public String toString() {
+        return getTimestamp() == null ? "Select a Session Date..." : getTimestamp();
+    }
 }

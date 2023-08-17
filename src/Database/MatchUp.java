@@ -2,15 +2,16 @@ package Database;
 
 /**
  * MatchUp
- *
+ * <p>
  * A class to represent a record within the Database's MATCHUP table
  *
- * @author Leron Tolmachev
- * @version 2017.11.11
- *
+ * @author Leron Tolmachev, Christopher Manuel
+ * @version 2023.08.17
+ * <p>
  * Change Log:
  * - Refactored Project after Sprint One
- * -
+ * - Refactored project, removing deprecated java calls
+ * - General code cleanup
  */
 public class MatchUp {
 
@@ -23,8 +24,8 @@ public class MatchUp {
      * Constructor for MatchUp Class
      *
      * @param questionNumber numerical position MatchUp will appear in TestSession
-     * @param itemA Item representing the first (left) option in a MatchUp
-     * @param itemB Item representing the second (right) option in a MatchUp
+     * @param itemA          Item representing the first (left) option in a MatchUp
+     * @param itemB          Item representing the second (right) option in a MatchUp
      */
     public MatchUp(int questionNumber, Item itemA, Item itemB, String decision) {
         this.questionNumber = questionNumber;
@@ -94,11 +95,11 @@ public class MatchUp {
     //Formatting to appropriately display Users JLists and JComboBoxes.
     @Override
     public String toString() {
-    String matchUpListItem ;
-    int gapSize = 23 - getItemA().getName().length() ;
-    String gap = new String(new char[gapSize]).replace("\0", " ");
-    matchUpListItem = ((getQuestionNumber() < 10 ? "# " : "#") + getQuestionNumber() + ":"+ gap + itemA.getName() + " | " + itemB.getName());
-    return matchUpListItem;
+        String matchUpListItem;
+        int gapSize = 23 - getItemA().getName().length();
+        String gap = new String(new char[gapSize]).replace("\0", " ");
+        matchUpListItem = ((getQuestionNumber() < 10 ? "# " : "#") + getQuestionNumber() + ":" + gap + itemA.getName() + " | " + itemB.getName());
+        return matchUpListItem;
     }
 
 }

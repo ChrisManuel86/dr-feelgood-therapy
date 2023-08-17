@@ -57,7 +57,7 @@ public class LoginAttempt {
         Database db = new Database();
         User compareUser = db.getUserByEmail(user.getEmail());
         db.closeConnection();
-        if(compareUser != null && user.getPassword().equals(compareUser.getPassword())) {
+        if (compareUser != null && user.getPassword().equals(compareUser.getPassword())) {
             match = true;
             setUser(compareUser);
             switch (user.getRole()) {
@@ -86,7 +86,7 @@ public class LoginAttempt {
     public boolean register() {
         boolean registered = false;
         Database db = new Database();
-        if(db.getUserByEmail(user.getEmail()) == null) {
+        if (db.getUserByEmail(user.getEmail()) == null) {
             db.insertUser(user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword());
             registered = true;
         }

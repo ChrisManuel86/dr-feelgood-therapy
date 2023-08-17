@@ -4,19 +4,20 @@ import java.awt.image.BufferedImage;
 
 /**
  * Item
- * <p>
  * Item Class for test items in comparison test
  *
- * @author Leron Tolmachev, Christopher Manuel
- * @version 2017.12.04
+ * @author Leron Tolmachev, Luke Kyser, Christopher Manuel
+ * @version 2023.08.17
  * <p>
  * Change Log:
  * - Refactored Project after Sprint One
  * - Consolidated Setup, Test, and Results Item Class into one
- * -    Luke Kyser: Added BufferedImage field and getters/setters.
- * -    Constructor takes a BufferedImage object which is null by default.
+ * - Luke Kyser: Added BufferedImage field and getters/setters.
+ * - Constructor takes a BufferedImage object which is null by default.
+ * - Refactored project, removing deprecated java calls
+ * - General code cleanup
  */
-public class Item implements Comparable<Item>{
+public class Item implements Comparable<Item> {
     private final int id;
     private final String name;
     private BufferedImage image;
@@ -28,11 +29,11 @@ public class Item implements Comparable<Item>{
     /**
      * Constructor for Item class
      *
-     * @param itemID   unique identifier for each Item
-     * @param itemName name of Item to be displayed to user
-     * @param testID   Test with which Item is associated
+     * @param itemID        unique identifier for each Item
+     * @param itemName      name of Item to be displayed to user
+     * @param ignoredTestID Test with which Item is associated
      */
-    public Item(int itemID, int testID, String itemName, BufferedImage image) {
+    public Item(int itemID, int ignoredTestID, String itemName, BufferedImage image) {
         this.id = itemID;
         this.name = itemName;
         this.image = image;
@@ -146,14 +147,14 @@ public class Item implements Comparable<Item>{
      *
      * @param image Image to be displayed along with Item
      */
-    public void setImage(BufferedImage image) { this.image = image; }
+    public void setImage(BufferedImage image) {
+        this.image = image;
+    }
 
     // Allows item array to be sorted by score
     @Override
     public int compareTo(Item compareItem) {
-
         int compareScore = compareItem.getScore();
-
         return compareScore - this.getScore();
     }
 

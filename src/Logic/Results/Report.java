@@ -26,8 +26,8 @@ import java.util.HashMap;
 public class Report {
 
     private final ArrayList<User> users;
-    private ArrayList<Test> tests;
     private final HashMap<String, ArrayList<Session>> sessions;
+    private ArrayList<Test> tests;
     private Session session;
 
     /**
@@ -50,21 +50,21 @@ public class Report {
     }
 
     /**
-     * Access Reports' session field
-     *
-     * @return Session session
-     */
-    public ArrayList<Session> getSessions(String testName) {
-        return sessions.get(testName);
-    }
-
-    /**
      * Mutate Report's session field
      *
      * @param session Test Session to be scored
      */
     public void setSession(Session session) {
         this.session = session;
+    }
+
+    /**
+     * Access Reports' session field
+     *
+     * @return Session session
+     */
+    public ArrayList<Session> getSessions(String testName) {
+        return sessions.get(testName);
     }
 
     /**
@@ -86,7 +86,6 @@ public class Report {
     }
 
     /**
-     *
      *
      */
     private void setTests(int userID) {
@@ -111,10 +110,10 @@ public class Report {
         Database db = new Database();
         ArrayList<Session> allSessions = db.getSessionsByUserID(user.getID());
         db.closeConnection();
-        for(Test test : tests) {
+        for (Test test : tests) {
             ArrayList<Session> testSessions = new ArrayList<>();
-            for(Session session : allSessions) {
-                if(session.getTestID() == test.getID()) {
+            for (Session session : allSessions) {
+                if (session.getTestID() == test.getID()) {
                     testSessions.add(session);
                 }
             }

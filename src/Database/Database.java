@@ -6,20 +6,23 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import static java.sql.DriverManager.*;
+
+import static java.sql.DriverManager.getConnection;
 
 
 /**
  * Database
- * <p>
  * Class used for communicating with database, and for placing items
  * into arrays and then passing that information to the form(s).
  *
  * @author Brooke Higgins, Christopher Manuel, Leron Tolmachev, and Luke Kyser
- * @version 2022.08.03
- *
+ * @version 2023.08.17
+ * <p>
  * Change Log:
  * - Refactored Project after Sprint One
  * - Added insertImage method
@@ -33,13 +36,14 @@ import static java.sql.DriverManager.*;
  * - Update SQL code to be compatible with mysql
  * - Refactored SQL to utilize SQL lite syntax as opposed to MS SQL
  * - Corrected error in insertMatchup method
+ * - Refactored project, removing deprecated java calls
+ * - General code cleanup
  */
- 
+
 public class Database {
     private final static DBInfo dbinfo = new DBInfo();
-
     private final static String DB_HOSTNAME = dbinfo.getDB_HOSTNAME();
-    private final static String DATABASE    = dbinfo.getDATABASE();
+    private final static String DATABASE = dbinfo.getDATABASE();
     private final static String DB_USERNAME = dbinfo.getDB_USERNAME();
     private final static String DB_PASSWORD = dbinfo.getDB_PASSWORD();
 
@@ -129,7 +133,7 @@ public class Database {
     /**
      * Insert Item object into the Database's ITEM table
      *
-     * @param int testID indicates which Test an Item belongs to
+     * @param int    testID indicates which Test an Item belongs to
      * @param String name indicates the name of the Item
      */
     public void insertItem(int testID, String name, BufferedImage image) {
@@ -190,10 +194,10 @@ public class Database {
     /**
      * Insert MatchUp object into the Database's MATCHUP table
      *
-     * @param int sessionID indicates which Session a MatchUp belongs to
-     * @param int questionNumber indicates order in which MatchUp was presented to user
-     * @param int itemAID indicates item presented on Left side of test form
-     * @param int itemBID indicates item presented on Right side of test form
+     * @param int    sessionID indicates which Session a MatchUp belongs to
+     * @param int    questionNumber indicates order in which MatchUp was presented to user
+     * @param int    itemAID indicates item presented on Left side of test form
+     * @param int    itemBID indicates item presented on Right side of test form
      * @param String decision indicates which of the above items user selected (can be "" for neither)
      */
     public void insertMatchUp(int sessionID, int questionNumber, int itemAID, int itemBID, String decision) {
@@ -265,8 +269,8 @@ public class Database {
     /**
      * Insert Session object into the Database's SESSION table
      *
-     * @param int userID indicates which User completed the Test
-     * @param int testID indicates which Test User completed
+     * @param int    userID indicates which User completed the Test
+     * @param int    testID indicates which Test User completed
      * @param String timestamp indicates date and time of Test completion
      */
     public int insertSession(int userID, int testID, String timestamp) {
@@ -348,7 +352,7 @@ public class Database {
                 stmt.setString(1, testName);
                 stmt.setString(2, settings);
                 ResultSet rs = stmt.executeQuery();
-                if(rs.next()) {
+                if (rs.next()) {
                     return rs.getInt("ID");
                 }
             } catch (SQLException e) {
@@ -368,7 +372,6 @@ public class Database {
         }
         return -1;
     }
-
 
 
     /**
@@ -395,9 +398,8 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return users.size() == 0 ? null : users.get(0);
+        return users.isEmpty() ? null : users.get(0);
     }
-
 
 
     /**
@@ -479,11 +481,11 @@ public class Database {
     }
 
     /**
-    * Remove test from database
-    * 
-    * @param String table
-    * @param int testID
-    */
+     * Remove test from database
+     *
+     * @param String table
+     * @param int    testID
+     */
     public void deleteFromDatabase(String table, int id) {
         String criteria = table.equalsIgnoreCase("matchup") ? "SessionID" : "TestID";
         String deleteQuery = "DELETE FROM " + table.toLowerCase() + " WHERE " + criteria + " = ?";

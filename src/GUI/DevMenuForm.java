@@ -1,6 +1,7 @@
 package GUI;
 
 import javax.swing.*;
+import javax.swing.plaf.ComponentUI;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -9,19 +10,18 @@ import static GUI.MainGUI.*;
 
 /**
  * DevMenuForm
- *
  * A GUI form which allows for selecting a specific module GUI to load.
  * Currently only supports AdminSetup and Test.
  *
- * @author Leron Tolmachev
- * @version 2017.11.11
- *
+ * @author Leron Tolmachev, Christopher Manuel
+ * @version 2023.08.17
+ * <p>
  * Change Log:
  * - Refactored Project after Sprint One.
  * - Updated with correct button destinations for all modules
- * -
+ * - Refactored project, removing deprecated java calls
  */
-public class DevMenuForm {
+public class DevMenuForm extends ComponentUI {
     private JPanel rootPanel;
     private JButton adminSetupButton;
     private JButton userLoginButton;
@@ -32,7 +32,7 @@ public class DevMenuForm {
      * Constructor for the DevMenuForm Class
      */
     public DevMenuForm() {
-        rootPanel.setPreferredSize(new Dimension(300,200));
+        rootPanel.setPreferredSize(new Dimension(300, 200));
         adminSetupButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -71,5 +71,4 @@ public class DevMenuForm {
     public JPanel getRootPanel() {
         return rootPanel;
     }
-
 }

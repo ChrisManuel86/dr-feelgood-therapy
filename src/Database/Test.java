@@ -4,32 +4,34 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Class Test.java.
+ * Class Test
+ * Test method for creating / storing Test Data in a hash
  *
- * @author Luke Kyser
- * @version 2017.11.21
- *
+ * @author Luke Kyser, Christopher Manuel
+ * @version 2023.08.17
+ * <p>
  * Change Log:
  * - Class created.
- * -
+ * - Refactored project, removing deprecated java calls
+ * - General code cleanup
  */
 
 public class Test {
-    private int testID;
     private final String testName;
-    private ArrayList<Item> items;
     private final HashMap<String, String> settings = new HashMap<>();
+    private int testID;
+    private ArrayList<Item> items;
 
     /**
      * Constructor for Test Class
      *
-     * @param testID set Test's testID field
+     * @param testID   set Test's testID field
      * @param testName set Test's testName field
      */
     public Test(int testID, String testName, String settings) {
         this.testID = testID;
         this.testName = testName;
-        this.items = new ArrayList<Item>();
+        this.items = new ArrayList<>();
         setSettings(settings);
     }
 
@@ -38,7 +40,7 @@ public class Test {
      *
      * @return int testID
      */
-    public int getID(){
+    public int getID() {
         return testID;
     }
 
@@ -56,7 +58,7 @@ public class Test {
      *
      * @return String testName
      */
-    public String getName(){
+    public String getName() {
         return testName;
     }
 
@@ -93,25 +95,20 @@ public class Test {
      * @param settings formatted String to be split into HashMap entries
      */
     public void setSettings(String settings) {
-        try {
-            if (settings == null) {
-                this.settings.put("QuestionText", "Which do you prefer?");
-                this.settings.put("TieText", "I can't decide.");
-                this.settings.put("SortMethod", "Random");
-                this.settings.put("ItemOrder", "Random");
-                this.settings.put("CustomMatchUps", "none");
-            } else {
-                String[] splitSettings = settings.split("\\\\");
-                this.settings.put("QuestionText", splitSettings[0]);
-                this.settings.put("TieText", splitSettings[1]);
-                this.settings.put("SortMethod", splitSettings[2]);
-                this.settings.put("ItemOrder", splitSettings[3]);
-                this.settings.put("CustomMatchUps", splitSettings[4]);
-                this.settings.put("all", settings);
-            }
-        }
-        catch (Exception e) {
-            System.out.println(e);
+        if (settings == null) {
+            this.settings.put("QuestionText", "Which do you prefer?");
+            this.settings.put("TieText", "I can't decide.");
+            this.settings.put("SortMethod", "Random");
+            this.settings.put("ItemOrder", "Random");
+            this.settings.put("CustomMatchUps", "none");
+        } else {
+            String[] splitSettings = settings.split("\\\\");
+            this.settings.put("QuestionText", splitSettings[0]);
+            this.settings.put("TieText", splitSettings[1]);
+            this.settings.put("SortMethod", splitSettings[2]);
+            this.settings.put("ItemOrder", splitSettings[3]);
+            this.settings.put("CustomMatchUps", splitSettings[4]);
+            this.settings.put("all", settings);
         }
     }
 
@@ -129,7 +126,7 @@ public class Test {
      *
      * @param index position of Item in items list
      */
-    public void removeItem(int index){
+    public void removeItem(int index) {
         items.remove(index);
     }
 

@@ -1,19 +1,17 @@
 import GUI.DevMenuForm;
 
 import javax.swing.*;
-import javafx.*;
 
 /**
- * UserLoginMain
+ * Main
+ * Main Class to launch a menu to select a module GUI.
  *
- * UserLoginMain Class, Currently launches a menu to select a module GUI.
+ * @author Leron Tolmachev, Christopher Manuel
+ * @version 2023.08.17
  *
- * @author Leron Tolmachev
- * @version 2017.11.11
- *
- *          Change Log:
- *          - Refactored Project after Sprint One
- *          -
+ * Change Log:
+ * - Refactored Project after Sprint One
+ * - Refactored project, removing deprecated java calls
  */
 class Main {
 
@@ -28,7 +26,7 @@ class Main {
             // Set System L&F
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException
-                | ClassNotFoundException e) {
+                 | ClassNotFoundException e) {
             // handle exception
         }
     }

@@ -1,6 +1,9 @@
 package Logic.Results;
 
-import Database.*;
+import Database.Database;
+import Database.Item;
+import Database.MatchUp;
+import Database.Session;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,8 +21,8 @@ import java.util.Collections;
  * - Reordered resultsModel (moved scores to end of results table)
  */
 public class Results {
-    private ArrayList<Item> items;
     private final ArrayList<MatchUp> matchUps;
+    private ArrayList<Item> items;
 
     /**
      * Constructor for Results Class

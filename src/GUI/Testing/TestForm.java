@@ -1,6 +1,7 @@
 package GUI.Testing;
 
-import Database.*;
+import Database.MatchUp;
+import Database.Test;
 import GUI.CustomSwingClasses.PicturePanel;
 import Logic.Testing.TestSession;
 
@@ -14,15 +15,15 @@ import static Resources.Constants.BUSINESS_NAME;
 
 /**
  * TestForm
- *
+ * <p>
  * GUI for Testing form.
  *
- * @author Leron Tolmachev
- * @version 2017.11.11
- *
+ * @author Leron Tolmachev, Christopher Manuel
+ * @version 2023.08.17
+ * <p>
  * Change Log:
  * - Refactored Project after Sprint One
- *
+ * - Refactored project, removing deprecated java calls
  */
 public class TestForm {
 
@@ -42,6 +43,7 @@ public class TestForm {
 
     private final TestSession session;
     private final JFrame frame;
+    private final ButtonGroup buttonGroup = new ButtonGroup();
     private JPanel rootPanel;
     // Company Name and Window Description
     private JLabel businessLabel;
@@ -51,7 +53,6 @@ public class TestForm {
     // Test Options
     private JPanel testTakinganel;
     private JPanel buttonsPanel;
-    private final ButtonGroup buttonGroup = new ButtonGroup();
     private JPanel itemAPanel;
     private PicturePanel itemAImage;
     private JRadioButton itemARadioButton;
@@ -73,7 +74,7 @@ public class TestForm {
      * Constructor for the TestForm Class
      *
      * @param session stores the business logic for Test Package
-     * @param frame JFrame containing TestForm GUI
+     * @param frame   JFrame containing TestForm GUI
      */
     public TestForm(TestSession session, JFrame frame) {
         this.session = session;
@@ -88,11 +89,11 @@ public class TestForm {
         // Set testChooserComboBox contents
         testChooserComboBox.setMaximumRowCount(10);
         testChooserComboBox.addItem(new Test(-1, null, "Which do you prefer?\\I can't decide\\Sequential\\Ordered\\ "));
-        for(Test test : session.getTests()) {
+        for (Test test : session.getTests()) {
             testChooserComboBox.addItem(test);
         }
         int itemCount = testChooserComboBox.getItemCount();
-        testChooserComboBox.setMaximumRowCount(itemCount >= 15 ? 15 : itemCount);
+        testChooserComboBox.setMaximumRowCount(Math.min(itemCount, 15));
 
         // Initialize buttonGroup
         buttonGroup.add(itemARadioButton);
@@ -108,8 +109,8 @@ public class TestForm {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 String selection;
-                if(e.getSource() instanceof JPanel) {
-                    selection = ((JRadioButton)((JPanel) e.getSource()).getComponent(0)).getActionCommand();
+                if (e.getSource() instanceof JPanel) {
+                    selection = ((JRadioButton) ((JPanel) e.getSource()).getComponent(0)).getActionCommand();
                 } else {
                     selection = buttonGroup.getSelection().getActionCommand();
                 }
@@ -126,7 +127,7 @@ public class TestForm {
         item0RadioButton.addMouseListener(selectOption);
 
         ActionListener selectTest = e -> {
-            if(testChooserComboBox.getSelectedIndex() != 0) {
+            if (testChooserComboBox.getSelectedIndex() != 0) {
                 session.generate((Test) testChooserComboBox.getSelectedItem());
                 toggleFrame();
                 testChooserComboBox.setEnabled(false);
@@ -158,7 +159,7 @@ public class TestForm {
         // Adds listener for answer submission
         ActionListener submitButton = e -> {
 
-            if(wentBack) {
+            if (wentBack) {
                 session.nextQuestion(session.getMatchUp().getDecision());
                 wentBack = false;
             }
@@ -184,7 +185,7 @@ public class TestForm {
      */
     private String getSelection() {
         String selection = null;
-        if(itemARadioButton.isSelected()) {
+        if (itemARadioButton.isSelected()) {
             selection = "A";
         } else if (itemBRadioButton.isSelected()) {
             selection = "B";
@@ -204,8 +205,8 @@ public class TestForm {
         itemBImage.setBgColor(UNSELECTED_BACKGROUND);
         itemBImage.repaint();
         Component[] components = buttonsPanel.getComponents();
-        for(Component c : components) {
-            if(c instanceof JPanel) {
+        for (Component c : components) {
+            if (c instanceof JPanel) {
                 ((JPanel) c).setBorder(BorderFactory.createRaisedBevelBorder());
 //                ((JPanel) c).setBorder(BorderFactory.createMatteBorder(3,3,3,3,Color.BLACK));
                 ((JPanel) c).getComponent(0).setBackground(UNSELECTED_BACKGROUND);
@@ -219,7 +220,7 @@ public class TestForm {
      */
     private void testCompleted() {
         frame.setVisible(false);
-        if(confirmDecision("Complete") == 0) {
+        if (confirmDecision("Complete") == 0) {
             frame.setVisible(true);
             resetForm();
         } else {
@@ -235,18 +236,16 @@ public class TestForm {
     private int confirmDecision(String resetType) {
         String text = "Return to Test Selection Menu?";
         String title = "Exit Test";
-        switch(resetType) {
-            case "Abort":
+        switch (resetType) {
+            case "Abort" -> {
                 text = ABORT_TEST_TEXT;
                 title = ABORT_TEST_TITLE;
-                break;
-            case "Complete":
+            }
+            case "Complete" -> {
                 text = COMPLETE_TEST_TEXT;
                 title = COMPLETE_TEST_TITLE;
-                break;
-            default:
-                System.out.print("!!!!! Error with Dialog Box !!!!!");
-                break;
+            }
+            default -> System.out.print("!!!!! Error with Dialog Box !!!!!");
         }
         return JOptionPane.showOptionDialog(null,
                 text, title, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
@@ -262,37 +261,37 @@ public class TestForm {
         JPanel panel = null;
         PicturePanel image = null;
         JRadioButton button = null;
-        if(selection == null) {
+        if (selection == null) {
             submitButton.setEnabled(false);
-        } else{
+        } else {
 
-            switch(selection) {
-                case "A":
+            switch (selection) {
+                case "A" -> {
                     panel = itemAPanel;
                     image = itemAImage;
                     button = itemARadioButton;
-                    break;
-                case "B":
+                }
+                case "B" -> {
                     panel = itemBPanel;
                     image = itemBImage;
                     button = itemBRadioButton;
-                    break;
-                default:
+                }
+                default -> {
                     panel = item0Panel;
                     button = item0RadioButton;
-                    break;
+                }
             }
         }
-        if(button != null && panel != null) {
+        if (button != null && panel != null) {
             button.setSelected(true);
             button.setBackground(SELECTED_BACKGROUND);
-            if(image != null) {
+            if (image != null) {
                 image.setBgColor(SELECTED_BACKGROUND);
                 image.repaint();
             }
             panel.setBackground(SELECTED_BACKGROUND);
 //            panel.setBorder(BorderFactory.createLoweredBevelBorder());
-            panel.setBorder(BorderFactory.createMatteBorder(2,2,2,2, SELECTED_BORDER));
+            panel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, SELECTED_BORDER));
             submitButton.setEnabled(true);
         }
     }
@@ -303,8 +302,8 @@ public class TestForm {
      * @param matchUp Matchup containing data for Test Question
      */
     private void displayMatchUp(MatchUp matchUp) {
-        if(matchUp != null) {
-            frame.setTitle(session.getTest().getName() + TEST_TITLE + String.valueOf(matchUp.getQuestionNumber()));
+        if (matchUp != null) {
+            frame.setTitle(session.getTest().getName() + TEST_TITLE + matchUp.getQuestionNumber());
             itemARadioButton.setText(matchUp.getItemA().getName());
             itemAImage.setImage(matchUp.getItemA().getImage());
             itemBRadioButton.setText(matchUp.getItemB().getName());
@@ -314,7 +313,7 @@ public class TestForm {
             progressBar.setValue((matchUp.getQuestionNumber() - 1) * 100 / session.getMatchUpList().size());
             submitButton.setText(matchUp.getQuestionNumber() == session.getMatchUpList().size() ? "Finish" : "Next >>");
             submitButton.setEnabled(matchUp.getDecision() != null);
-        } else{
+        } else {
             testCompleted();
         }
     }
@@ -329,7 +328,7 @@ public class TestForm {
     }
 
     private void toggleFrame() {
-        if(frame.getTitle().equals(WINDOW_TITLE)) {
+        if (frame.getTitle().equals(WINDOW_TITLE)) {
             testSelectionPanel.setVisible(false);
             testTakinganel.setVisible(true);
             rootPanel.setPreferredSize(SIZE_LARGE);

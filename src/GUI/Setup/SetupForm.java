@@ -10,7 +10,8 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
-import java.net.URL;
+import java.net.URI;
+import java.util.Objects;
 
 import static GUI.MainGUI.changeSetupGUI;
 import static Resources.Constants.BUSINESS_NAME;
@@ -20,12 +21,13 @@ import static Resources.Constants.BUSINESS_NAME;
  * <p>
  * GUI for Test Setup form.
  *
- * @author Luke Kyser
- * @version 2017.11.28
+ * @author Luke Kyser, Christopher Manuel
+ * @version 2023.08.17
  * <p>
  * Change Log:
  * - Added Sprint 2 Functionality
  * - Refactored Project Architecture and classes
+ * - Refactored project, removing deprecated java calls
  */
 public class SetupForm {
 
@@ -34,7 +36,7 @@ public class SetupForm {
     private static final String TEST_LOCKED_TEXT = "Editing for this test has been disabled because\nat least one user has completed this test.";
     private static final String DELETE_CONFIRM_TEXT = "Are you sure you want to delete this test?";
     private static final String DELETE_LOCKED_CONFIRM_TEXT = "This test has been been completed by\nat least one user. Deleting it will also\ndelete all test results for this test.\nAre you sure you want to delete this test?";
-    private static final String DELETE_CONFIRM_TITLE= "Delete Test?";
+    private static final String DELETE_CONFIRM_TITLE = "Delete Test?";
     private static final String TEST_LOCKED_TITLE = "Locked Test";
     private static final String CANCEL_BUTTON_BACK = "<< Select another test";
     private static final String CANCEL_BUTTON_CANCEL = "Cancel Changes";
@@ -84,7 +86,7 @@ public class SetupForm {
      * Constructor for SetupForm Class
      *
      * @param testSetup stores the business logic for AdminSetup Package
-     * @param frame JFrame containing SetupForm GUI
+     * @param frame     JFrame containing SetupForm GUI
      */
     public SetupForm(TestSetup testSetup, JFrame frame) {
 
@@ -95,7 +97,7 @@ public class SetupForm {
 
         businessLabel.setText(BUSINESS_NAME);
         testEditPanel.setVisible(false);
-        warningLabel.setIcon(new ImageIcon(getClass().getResource("/Resources/warning.gif")));
+        warningLabel.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/Resources/warning.gif"))));
         warningLabel.setVisible(false);
         itemListModel = new DefaultListModel<>();
         updateTestList();
@@ -126,14 +128,15 @@ public class SetupForm {
                     validTestName = false;
                 } else {
                     for (Test test : testSetup.getTests()) {
-                        if (newTestName.toLowerCase().equals(test.getName().toLowerCase())) {
+                        if (newTestName.equalsIgnoreCase(test.getName())) {
                             validTestName = false;
                             errorText = "Test \"" + newTestName.toUpperCase() + NEW_TEST_DUPLICATE_WARNING;
+                            break;
                         }
 
                     }
                 }
-            } while(!validTestName);
+            } while (!validTestName);
             testSetup.setTest(new Test(-1, newTestName, null));
             toggleFrame();
             validateTest(false);
@@ -156,7 +159,7 @@ public class SetupForm {
         };
         ListSelectionListener selectItem = e -> {
             picturePanel.setVisible(false);
-            if(!e.getValueIsAdjusting()) {
+            if (!e.getValueIsAdjusting()) {
                 if (itemList.isSelectionEmpty() || itemList.getSelectedValue().getImage() == null) {
                     picturePanel.setImage(null);
                     picturePanel.setVisible(true);
@@ -172,16 +175,16 @@ public class SetupForm {
         ActionListener findImages = e -> imageSearch(FIND_IMAGES_URL + itemList.getSelectedValue().getName().replace(" ", "%20"));
         ActionListener removeImage = e -> itemList.getSelectedValue().setImage(null);
         ActionListener cancel = e -> {
-            if(confirmDecision(e.getActionCommand()) == 0) {
+            if (confirmDecision(e.getActionCommand()) == 0) {
                 toggleFrame();
             }
         };
         ActionListener delete = e -> {
-            if(testSetup.getTest().getID() == -1) {
+            if (testSetup.getTest().getID() == -1) {
                 toggleFrame();
 
             } else {
-                if(confirmDecision("Delete") == 0) {
+                if (confirmDecision("Delete") == 0) {
                     testSetup.deleteTest(testSetup.findSessions());
                     updateTestList();
                     toggleFrame();
@@ -196,13 +199,21 @@ public class SetupForm {
         addItemField.addActionListener(addItem);
         addItemButton.addActionListener(addItem);
         removeItemButton.addActionListener(removeItem);
-        itemList.addListSelectionListener (selectItem);
+        itemList.addListSelectionListener(selectItem);
         picturePanel.addPropertyChangeListener(addImage);
         customizeButton.addActionListener(customizeTest);
         findImagesButton.addActionListener(findImages);
         removeImageButton.addActionListener(removeImage);
         cancelButton.addActionListener(cancel);
         deleteButton.addActionListener(delete);
+    }
+
+    private static void imageSearch(String urlString) {
+        try {
+            Desktop.getDesktop().browse(new URI(urlString));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public JPanel getRootPanel() {
@@ -217,17 +228,18 @@ public class SetupForm {
      */
     private boolean displayWarning(String input) {
         boolean warning;
-        if(input.isEmpty()) {
+        if (input.isEmpty()) {
             warningLabel.setText(BLANK_ITEM_WARNING);
             warning = true;
         } else {
             boolean duplicate = false;
             for (Item item : testSetup.getTest().getItems()) {
-                if (item.getName().toLowerCase().equals(input.toLowerCase())) {
+                if (item.getName().equalsIgnoreCase(input)) {
                     duplicate = true;
+                    break;
                 }
             }
-            if(duplicate) {
+            if (duplicate) {
                 warningLabel.setText("\"" + input.toUpperCase() + "\"" + ITEM_DUPLICATE_WARNING);
                 warning = true;
             } else {
@@ -242,14 +254,14 @@ public class SetupForm {
     private void validateTest(boolean lockedTest) {
         warningLabel.setVisible(false);
         int itemCount = itemList.getModel().getSize();
-        if(itemCount < 1) {
+        if (itemCount < 1) {
             addItemField.setEnabled(true);
             addItemButton.setEnabled(true);
             removeItemButton.setEnabled(false);
             findImagesButton.setEnabled(false);
             removeImageButton.setEnabled(false);
             customizeButton.setEnabled(false);
-        } else if(itemCount == 1) {
+        } else if (itemCount == 1) {
             addItemField.setEnabled(true);
             addItemButton.setEnabled(true);
             removeItemButton.setEnabled(true);
@@ -262,7 +274,7 @@ public class SetupForm {
             findImagesButton.setEnabled(true);
             customizeButton.setEnabled(true);
         }
-        if(lockedTest) {
+        if (lockedTest) {
             addItemField.setEnabled(false);
             addItemButton.setEnabled(false);
             removeItemButton.setEnabled(false);
@@ -280,8 +292,8 @@ public class SetupForm {
      */
     private void updateItemList() {
         itemListModel = new DefaultListModel<>();
-        if(testSetup.getTest().getItems() != null) {
-            for(Item item : testSetup.getTest().getItems()) {
+        if (testSetup.getTest().getItems() != null) {
+            for (Item item : testSetup.getTest().getItems()) {
                 itemListModel.addElement(item);
             }
         } else {
@@ -300,42 +312,35 @@ public class SetupForm {
         testSelectionComboBox.removeAllItems();
         testSelectionComboBox.addItem(new Test(-1, null, null));
         testSetup.setTests();
-        for(Test test : testSetup.getTests()) {
+        for (Test test : testSetup.getTests()) {
             testSelectionComboBox.addItem(test);
         }
         int itemCount = testSelectionComboBox.getItemCount();
-        testSelectionComboBox.setMaximumRowCount(itemCount >= 15 ? 15 : itemCount);
-    }
-
-    private static void imageSearch(String urlString) {
-        try {
-            Desktop.getDesktop().browse(new URL(urlString).toURI());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        testSelectionComboBox.setMaximumRowCount(Math.min(itemCount, 15));
     }
 
     private int confirmDecision(String button) {
         String text;
         String title;
-        switch(button) {
-            case "Cancel":
+        switch (button) {
+            case "Cancel" -> {
                 text = CANCEL_CONFIRM_TEXT;
                 title = CANCEL_CONFIRM_TITLE;
-                break;
-            case "Delete":
-                text = testSetup.findSessions() ? DELETE_LOCKED_CONFIRM_TEXT: DELETE_CONFIRM_TEXT;
+            }
+            case "Delete" -> {
+                text = testSetup.findSessions() ? DELETE_LOCKED_CONFIRM_TEXT : DELETE_CONFIRM_TEXT;
                 title = DELETE_CONFIRM_TITLE;
-                break;
-            default:
+            }
+            default -> {
                 return 0;
+            }
         }
         return JOptionPane.showOptionDialog(null,
                 text, title, JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
     }
 
     private void toggleFrame() {
-        if(frame.getTitle().equals(TEST_SELECTION_TITLE)) {
+        if (frame.getTitle().equals(TEST_SELECTION_TITLE)) {
             frame.setTitle(testSetup.getTest().getName() + TEST_EDIT_TITLE);
             descriptionLabel.setText(testSetup.getTest().getName() + TEST_EDIT_TITLE);
             testSelectionPanel.setVisible(false);

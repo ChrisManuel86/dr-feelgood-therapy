@@ -5,9 +5,12 @@ import Logic.Login.LoginAttempt;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.util.Objects;
 
-import static GUI.MainGUI.*;
+import static GUI.MainGUI.changeLoginGUI;
 import static Resources.Constants.BUSINESS_NAME;
 
 /**
@@ -15,12 +18,12 @@ import static Resources.Constants.BUSINESS_NAME;
  * <p>
  * GUI for user Login form.
  *
- * @author Brooke Higgins
- * @version 2017.11.03
+ * @author Brooke Higgins, Christopher Manuel
+ * @version 2023.08.17
  * <p>
  * Change Log:
  * - Refactored Project after Sprint One
- * -
+ * - Refactored project, removing deprecated java calls
  */
 
 public class LoginForm {
@@ -49,7 +52,7 @@ public class LoginForm {
      * Constructor for the LoginForm Class
      *
      * @param loginAttempt stores the business logic for UserLogin Package
-     * @param frame JFrame containing LoginForm GUI
+     * @param frame        JFrame containing LoginForm GUI
      */
     public LoginForm(LoginAttempt loginAttempt, JFrame frame) {
 
@@ -57,7 +60,7 @@ public class LoginForm {
 
         rootPanel.setPreferredSize(new Dimension(650, 200));
 
-        ImageIcon WARNING_ICON = new ImageIcon(getClass().getResource("/Resources/warning.gif"));
+        ImageIcon WARNING_ICON = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Resources/warning.gif")));
         emailIcon.setIcon(WARNING_ICON);
         emailIcon.setVisible(false);
         passwordIcon.setIcon(WARNING_ICON);
@@ -90,10 +93,10 @@ public class LoginForm {
                     passwordField.setText("");
                 }
             } else {
-                if(passwordIcon.isVisible()) {
+                if (passwordIcon.isVisible()) {
                     passwordField.grabFocus();
                 }
-                if(emailIcon.isVisible()) {
+                if (emailIcon.isVisible()) {
                     emailField.grabFocus();
                 }
             }
@@ -127,13 +130,9 @@ public class LoginForm {
     }
 
     private void validate(String field) {
-        switch(field) {
-            case "Email":
-                emailIcon.setVisible(!loginAttempt.validateEmailAddress(emailField.getText()));
-                break;
-            case "Password":
-                passwordIcon.setVisible(!loginAttempt.validatePassword(passwordField.getText()));
-                break;
+        switch (field) {
+            case "Email" -> emailIcon.setVisible(!loginAttempt.validateEmailAddress(emailField.getText()));
+            case "Password" -> passwordIcon.setVisible(!loginAttempt.validatePassword(passwordField.getText()));
         }
     }
 }

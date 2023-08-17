@@ -11,15 +11,26 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
+
+/**
+ * DragAndDropPicturePanel
+ * Class that extends Picture Panel to display pictures in the Root Panel and allows them to be dropped in from outside
+ * sources
+ *
+ * @author Christopher Manuel
+ * @version 2023.08.17
+ * <p>
+ * Change Log:
+ * - Refactored project, removing deprecated java calls
+ */
 
 public class DragAndDropPicturePanel extends PicturePanel implements DropTargetListener {
     private final static String DROP_TEXT = "Drop Image Here";
-
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
     private boolean dragging = false;
     private BufferedImage image = null;
-    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-
     // Offsets
     private int xOffset = 0;
     private int yOffset = 0;
@@ -35,13 +46,13 @@ public class DragAndDropPicturePanel extends PicturePanel implements DropTargetL
         new DropTarget(this, this);
     }
 
+    public BufferedImage getImage() {
+        return image;
+    }
+
     public void setImage(BufferedImage value) {
         image = value;
         repaint();
-    }
-
-    public BufferedImage getImage() {
-        return image;
     }
 
     @Override
@@ -69,7 +80,7 @@ public class DragAndDropPicturePanel extends PicturePanel implements DropTargetL
             int textWidth = g.getFontMetrics().stringWidth(DROP_TEXT);
             int textHeight = g.getFontMetrics().getHeight();
             g.setColor(Color.gray);
-            g.drawString(DROP_TEXT, (panelWidth - textWidth) / 2, (panelHeight + textHeight / 2)/2);
+            g.drawString(DROP_TEXT, (panelWidth - textWidth) / 2, (panelHeight + textHeight / 2) / 2);
         }
 
         // Highlight the panel to show the user is dragging over it.
@@ -79,7 +90,7 @@ public class DragAndDropPicturePanel extends PicturePanel implements DropTargetL
         }
 
         // Draw frame around panel
-        g.drawRect(0, 0, panelWidth -1 , panelHeight - 1);
+        g.drawRect(0, 0, panelWidth - 1, panelHeight - 1);
     }
 
     @Override
@@ -123,11 +134,11 @@ public class DragAndDropPicturePanel extends PicturePanel implements DropTargetL
                 dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
 
                 // And add the list of file names to our text area
-                List list;
                 try {
-                    list = (List) tr.getTransferData(flavor);
-                    if (list.size() > 0)
-                        loadFile((File) list.get(0));
+                    List<File> list;
+                    for (File file : list = Collections.unmodifiableList((List<File>) tr.getTransferData(flavor))) {
+                        loadFile(list.get(0));
+                    }
                 } catch (UnsupportedFlavorException | IOException e) {
                     e.printStackTrace();
                 }
@@ -143,8 +154,8 @@ public class DragAndDropPicturePanel extends PicturePanel implements DropTargetL
     void imageCrop(BufferedImage image) {
         int imageWidth = image.getWidth();
         int imageHeight = image.getHeight();
-        double widthPercent = (double)panelWidth / imageWidth;
-        double heightPercent = (double)panelHeight / imageHeight;
+        double widthPercent = (double) panelWidth / imageWidth;
+        double heightPercent = (double) panelHeight / imageHeight;
         double percentDifference;
 
         if (widthPercent > heightPercent) {
@@ -152,7 +163,7 @@ public class DragAndDropPicturePanel extends PicturePanel implements DropTargetL
 
             widthPercent -= percentDifference;
 
-            int minusPixels = panelWidth - (int)(image.getWidth() * widthPercent);
+            int minusPixels = panelWidth - (int) (image.getWidth() * widthPercent);
 
             xOffset = minusPixels / 2;
             panelWidthOffset = minusPixels;
@@ -162,7 +173,7 @@ public class DragAndDropPicturePanel extends PicturePanel implements DropTargetL
 
             heightPercent -= percentDifference;
 
-            int minusPixels = panelHeight - (int)(image.getHeight() * heightPercent);
+            int minusPixels = panelHeight - (int) (image.getHeight() * heightPercent);
 
             yOffset = minusPixels / 2;
             panelHeightOffset = minusPixels;

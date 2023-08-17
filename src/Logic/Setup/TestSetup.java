@@ -1,6 +1,9 @@
 package Logic.Setup;
 
-import Database.*;
+import Database.Database;
+import Database.Item;
+import Database.Session;
+import Database.Test;
 
 import java.util.ArrayList;
 
@@ -9,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author Luke Kyser
  * @version 2017.11.28
- *
+ * <p>
  * Change Log:
  * - Refactored Project after Sprint One
  * -
@@ -21,7 +24,7 @@ public class TestSetup {
     /**
      * Constructor for TestSetup Class
      */
-    public TestSetup(){
+    public TestSetup() {
         setTests();
     }
 
@@ -31,7 +34,7 @@ public class TestSetup {
 
     public void setTest(Test test) {
         this.test = test;
-        if(test != null && test.getID() != -1) {
+        if (test != null && test.getID() != -1) {
             setItems(test.getID());
         }
     }
@@ -63,7 +66,7 @@ public class TestSetup {
      */
     public boolean findSessions() {
         boolean foundSessions = false;
-        if(test.getID() != -1) {
+        if (test.getID() != -1) {
             Database db = new Database();
             foundSessions = !db.getSessionsByTestID(test.getID()).isEmpty();
             db.closeConnection();
@@ -76,7 +79,6 @@ public class TestSetup {
      * test is new and doesn't exist in the database. Otherwise, the items
      * in the test need to be deleted in the database before the new list of items
      * is added.
-     *
      */
     public void completeSetup() {
         Database db = new Database();
@@ -84,17 +86,17 @@ public class TestSetup {
         if (test.getID() != -1) {
             db.deleteFromDatabase("ITEM", test.getID());
         }
-        test.setID(db.insertTest(test.getID(), test.getName(),test.getSettings("all")));
-        for(Item item : test.getItems()) {
+        test.setID(db.insertTest(test.getID(), test.getName(), test.getSettings("all")));
+        for (Item item : test.getItems()) {
             db.insertItem(test.getID(), item.getName(), item.getImage());
         }
     }
 
     public void deleteTest(boolean lockedTest) {
         Database db = new Database();
-        if(lockedTest) {
+        if (lockedTest) {
             ArrayList<Session> sessions = db.getSessionsByTestID(test.getID());
-            for(Session session : sessions) {
+            for (Session session : sessions) {
                 db.deleteFromDatabase("MATCHUP", session.getSessionID());
             }
             db.deleteFromDatabase("SESSION", test.getID());

@@ -8,42 +8,48 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.Objects;
 
 import static GUI.MainGUI.changeLoginGUI;
 import static Resources.Constants.BUSINESS_NAME;
 
 /**
- * @author Brooke Higgins and Leron Tolmachev
+ * @author Brooke Higgins, Leron Tolmachev, Christopher Manuel
  * @version 2017.11.15
- *          <p>
- *          Change Log:
- *          - Refactored Project after Sprint One
+ * <p>
+ * Change Log:
+ * - Refactored Project after Sprint One
+ * - Refactored project, removing deprecated java calls
  */
 public class CreateAccountForm {
 
     private final JFrame frame;
     private final LoginAttempt loginAttempt;
-
     private JPanel rootPanel;
     private JPanel contentPanel;
+
     // Company Name and Window Description
     private JLabel businessLabel;
     private JLabel descriptionLabel;
+
     // User Name Details
     private JLabel firstNameLabel;
     private JTextField firstNameField;
     private JLabel lastNameLabel;
     private JTextField lastNameField;
+
     // User Email Details
     private JLabel emailLabel;
     private JTextField emailField;
     private JLabel emailConfirmLabel;
     private JTextField emailConfirmField;
+
     // User Password Details
     private JLabel passwordLabel;
     private JPasswordField passwordField;
     private JLabel passwordConfirmLabel;
     private JPasswordField passwordConfirmField;
+
     // Navigation Buttons
     private JButton clearButton;
     private JButton loginButton;
@@ -75,7 +81,7 @@ public class CreateAccountForm {
         passwordField.setText(loginAttempt.getUser().getPassword());
         firstNameField.requestFocusInWindow();
 
-        ImageIcon WARNING_ICON = new ImageIcon(getClass().getResource("/Resources/warning.gif"));
+        ImageIcon WARNING_ICON = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Resources/warning.gif")));
         firstNameIcon.setIcon(WARNING_ICON);
         firstNameIcon.setVisible(false);
         lastNameIcon.setIcon(WARNING_ICON);
@@ -139,10 +145,10 @@ public class CreateAccountForm {
     }
 
     private void registerAttempt() {
-        if(!firstNameField.getText().isEmpty() &&
+        if (!firstNameField.getText().isEmpty() &&
                 !lastNameField.getText().isEmpty() &&
                 loginAttempt.validateEmailAddress(emailField.getText()) &&
-                emailConfirmField.getText().toLowerCase().equals(emailField.getText().toLowerCase()) &&
+                emailConfirmField.getText().equalsIgnoreCase(emailField.getText()) &&
                 loginAttempt.validatePassword(passwordField.getText()) &&
                 passwordConfirmField.getText().equals(passwordField.getText())) {
             loginAttempt.setUser(new User(-1, "User", firstNameField.getText(), lastNameField.getText(), emailField.getText().toLowerCase(), passwordField.getText()));
@@ -156,25 +162,18 @@ public class CreateAccountForm {
     }
 
     private void validate(String field) {
-        switch(field) {
-            case "First Name":
-                firstNameIcon.setVisible(firstNameField.getText().isEmpty() || firstNameField.getText() == null);
-                break;
-            case "Last Name":
-                lastNameIcon.setVisible(lastNameField.getText().isEmpty() || lastNameField.getText() == null);
-                break;
-            case "Email Address":
-                emailIcon.setVisible(!loginAttempt.validateEmailAddress(emailField.getText()));
-                break;
-            case "Confirm Email Address":
-                emailConfirmIcon.setVisible(!emailField.getText().toLowerCase().equals(emailConfirmField.getText().toLowerCase()));
-                break;
-            case "Password":
-                passwordIcon.setVisible(!loginAttempt.validatePassword(passwordField.getText()) || passwordField.getText().length() < 8);
-                break;
-            case "Confirm Password":
-                passwordConfirmIcon.setVisible(!passwordField.getText().equals(passwordConfirmField.getText()));
-                break;
+        switch (field) {
+            case "First Name" ->
+                    firstNameIcon.setVisible(firstNameField.getText().isEmpty() || firstNameField.getText() == null);
+            case "Last Name" ->
+                    lastNameIcon.setVisible(lastNameField.getText().isEmpty() || lastNameField.getText() == null);
+            case "Email Address" -> emailIcon.setVisible(!loginAttempt.validateEmailAddress(emailField.getText()));
+            case "Confirm Email Address" ->
+                    emailConfirmIcon.setVisible(!emailField.getText().equalsIgnoreCase(emailConfirmField.getText()));
+            case "Password" ->
+                    passwordIcon.setVisible(!loginAttempt.validatePassword(passwordField.getText()) || passwordField.getText().length() < 8);
+            case "Confirm Password" ->
+                    passwordConfirmIcon.setVisible(!passwordField.getText().equals(passwordConfirmField.getText()));
         }
     }
 }

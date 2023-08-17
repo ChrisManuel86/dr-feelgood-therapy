@@ -11,6 +11,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -23,12 +24,12 @@ import static Resources.Constants.BUSINESS_NAME;
  * GUI for account Results Reporting form.
  *
  * @author Leron Tolmachev, Christopher Manuel
- * @version 2017.12.08
+ * @version 2023.08.17
  * <p>
  * Change Log:
  * - Implemented Sprint 2 Story features
  * - Refactored Code.
- * -
+ * - Refactored project, removing deprecated java calls
  */
 
 public class ReportForm {
@@ -50,17 +51,6 @@ public class ReportForm {
     private JScrollPane rankingsPane;
     private JScrollPane matrixPane;
     private JLabel businessLabel;
-    // ActionListeners
-    private final ActionListener selectObject= e -> {
-        JComboBox comboBox = ((JComboBox) e.getSource());
-        if (comboBox.getSelectedIndex() != 0) {
-            makeSelection(comboBox.getActionCommand());
-        } else {
-            tabbedPane.setVisible(false);
-            clearTable(rankingsTable);
-            clearTable(matrixTable);
-        }
-    };
     /**
      * Constructor for ReportForm Class
      */
@@ -81,7 +71,7 @@ public class ReportForm {
 //        findUserComboBox.setFont(new Font("Monospaced", Font.BOLD, 12));
         findUserComboBox.setActionCommand("User");
         findUserComboBox.addItem(new User(-1, null, null, null, null, null));
-        for(User user : report.getUsers()) {
+        for (User user : report.getUsers()) {
             findUserComboBox.addItem(user);
         }
         int itemCount = findUserComboBox.getItemCount();
@@ -100,6 +90,38 @@ public class ReportForm {
         findSessionComboBox.addActionListener(selectObject);
         findTestComboBox.addActionListener(selectObject);
         findUserComboBox.addActionListener(selectObject);
+    }    // ActionListeners
+    private final ActionListener selectObject = this::actionPerformed;
+
+    private static TableModel getTableModel(Results results) {
+        return getModel(results.getResultsModel(), new String[]{"Rank", "Item", "Wins", "Losses", "Ties", "Score"});
+    }
+
+    private static TableModel getModel(Object[][] results, String[] results1) {
+        return new
+                AbstractTableModel() {
+                    private final String[] columnNames = results1;
+
+                    @Override
+                    public int getRowCount() {
+                        return results.length;
+                    }
+
+                    @Override
+                    public int getColumnCount() {
+                        return columnNames.length;
+                    }
+
+                    @Override
+                    public String getColumnName(int col) {
+                        return columnNames[col];
+                    }
+
+                    @Override
+                    public Object getValueAt(int row, int col) {
+                        return results[row][col];
+                    }
+                };
     }
 
     /**
@@ -117,38 +139,14 @@ public class ReportForm {
      * @param results Results calculated from the selected Session
      */
     private void buildRankingsTable(Results results) {
-        Object[][] resultsModel = results.getResultsModel();
-        TableModel dataModel = new
-                AbstractTableModel() {
-                    private final String[] columnNames = {"Rank", "Item", "Wins", "Losses", "Ties", "Score"};
-
-                    @Override
-                    public int getRowCount() {
-                        return resultsModel.length;
-                    }
-
-                    @Override
-                    public int getColumnCount() {
-                        return columnNames.length;
-                    }
-
-                    @Override
-                    public String getColumnName(int col) {
-                        return columnNames[col];
-                    }
-
-                    @Override
-                    public Object getValueAt(int row, int col) {
-                        return resultsModel[row][col];
-                    }
-                };
+        TableModel dataModel = getTableModel(results);
         rankingsTable.getTableHeader().setReorderingAllowed(false);
         rankingsTable.setModel(dataModel);
         rankingsTable.setPreferredScrollableViewportSize(new Dimension(300, findTableHeight(rankingsTable)));
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         rankingsTable.setDefaultRenderer(String.class, centerRenderer);
-        for(int i= 0; i < dataModel.getColumnCount() ; i++){
+        for (int i = 0; i < dataModel.getColumnCount(); i++) {
             rankingsTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
     }
@@ -159,38 +157,14 @@ public class ReportForm {
      * @param results Results calculated from the selected Session
      */
     private void buildMatrixTable(Results results) {
-        Object[][] matrixModel = results.getMatrixModel();
-        TableModel dataModel = new
-                AbstractTableModel() {
-                    private final String[] columnNames = results.getColumnNames();
-
-                    @Override
-                    public int getRowCount() {
-                        return matrixModel.length;
-                    }
-
-                    @Override
-                    public int getColumnCount() {
-                        return columnNames.length;
-                    }
-
-                    @Override
-                    public String getColumnName(int col) {
-                        return columnNames[col];
-                    }
-
-                    @Override
-                    public Object getValueAt(int row, int col) {
-                        return matrixModel[row][col];
-                    }
-                };
+        TableModel dataModel = getModel(results.getMatrixModel(), results.getColumnNames());
         matrixTable.setModel(dataModel);
         matrixTable.getTableHeader().setReorderingAllowed(false);
         matrixTable.setCellSelectionEnabled(true);
         matrixTable.setPreferredScrollableViewportSize(new Dimension(620, findTableHeight(matrixTable)));
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-        for(int i= 0; i < dataModel.getColumnCount() ; i++){
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int i = 0; i < dataModel.getColumnCount(); i++) {
             matrixTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
     }
@@ -251,8 +225,8 @@ public class ReportForm {
      * @param comboBoxType String indicating which JComboBox was selected
      */
     private void makeSelection(String comboBoxType) {
-        switch(comboBoxType) {
-            case "User":
+        switch (comboBoxType) {
+            case "User" -> {
                 report.setSession(null);
                 findTestComboBox.removeActionListener(selectObject);
                 findTestComboBox.removeAllItems();
@@ -266,32 +240,30 @@ public class ReportForm {
                 for (Test test : tests) {
                     findTestComboBox.addItem(test);
                 }
-                setComboBox(findTestComboBox, tests);
-                break;
-            case "Test":
-
+                setComboBoxSession(findTestComboBox, tests);
+            }
+            case "Test" -> {
                 assert findTestComboBox.getSelectedItem() != null;
                 ArrayList<Session> sessions = report.getSessions(((Test) findTestComboBox.getSelectedItem()).getName());
                 findSessionComboBox.removeActionListener(selectObject);
                 findSessionComboBox.removeAllItems();
                 findSessionComboBox.addActionListener(selectObject);
-                findSessionComboBox.addItem(new Session(-1,-1,-1, null));
-                for(Session session : sessions) {
+                findSessionComboBox.addItem(new Session(-1, -1, -1, null));
+                for (Session session : sessions) {
                     findSessionComboBox.addItem(session);
                 }
-                setComboBox(findSessionComboBox, sessions);
-                break;
-            case "Session":
+                setComboBoxTest(findSessionComboBox, sessions);
+            }
+            case "Session" -> {
                 report.setSession((Session) findSessionComboBox.getSelectedItem());
                 generateData(report.getSession());
-                break;
-            default:
-                System.out.print("!!!!!! Error when selecting from a JComboBox !!!!!");
-                break;
+            }
+            default -> System.out.print("!!!!!! Error when selecting from a JComboBox !!!!!");
         }
     }
-    private void setComboBox(JComboBox comboBox, ArrayList list) {
-        if(list.size() == 1) {
+
+    private void setComboBoxSession(JComboBox<Test> comboBox, ArrayList<Test> list) {
+        if (list.size() == 1) {
             comboBox.setSelectedIndex(1);
             comboBox.setEnabled(false);
         } else {
@@ -302,6 +274,17 @@ public class ReportForm {
         }
     }
 
+    private void setComboBoxTest(JComboBox<Session> comboBox, ArrayList<Session> list) {
+        if (list.size() == 1) {
+            comboBox.setSelectedIndex(1);
+            comboBox.setEnabled(false);
+        } else {
+            comboBox.setSelectedIndex(0);
+            comboBox.setEnabled(true);
+            int itemCount = comboBox.getItemCount();
+            comboBox.setMaximumRowCount(Math.min(itemCount, 15));
+        }
+    }
 
     /**
      * Clears contents of Form elements
@@ -314,4 +297,17 @@ public class ReportForm {
         clearTable(rankingsTable);
         clearTable(matrixTable);
     }
+
+    private void actionPerformed(ActionEvent e) {
+        JComboBox comboBox = ((JComboBox) e.getSource());
+        if (comboBox.getSelectedIndex() != 0) {
+            makeSelection(comboBox.getActionCommand());
+        } else {
+            tabbedPane.setVisible(false);
+            clearTable(rankingsTable);
+            clearTable(matrixTable);
+        }
+    }
+
+
 }

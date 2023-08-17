@@ -5,15 +5,25 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Objects;
+
+/**
+ * PicturePanel
+ * Class for Picture Panel to display pictures in the Root Panel
+ *
+ * @author Christopher Manuel
+ * @version 2023.08.17
+ * <p>
+ * Change Log:
+ * - Refactored project, removing deprecated java calls
+ */
 
 public class PicturePanel extends JPanel {
-
-    private BufferedImage image = null;
 
     // Panel Constants
     private final static int PANEL_WIDTH = 305;
     private final static int PANEL_HEIGHT = 210;
-
+    private BufferedImage image = null;
     // Offsets
     private int xOffset = 0;
     private int yOffset = 0;
@@ -28,7 +38,7 @@ public class PicturePanel extends JPanel {
 
     public void setImage(BufferedImage image) {
         try {
-            BufferedImage defaultImage = ImageIO.read(getClass().getResource("/Resources/defaultImage.png"));
+            BufferedImage defaultImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Resources/defaultImage.png")));
             this.image = image != null ? image : defaultImage;
             repaint();
         } catch (IOException e) {
@@ -53,7 +63,7 @@ public class PicturePanel extends JPanel {
 
             g.setColor(bgColor);
             g.fillRect(0, 0, panelWidth, panelHeight);
-            g.drawImage(image, xOffset, yOffset, panelWidth - panelWidthOffset, panelHeight - panelHeightOffset, bgColor,null);
+            g.drawImage(image, xOffset, yOffset, panelWidth - panelWidthOffset, panelHeight - panelHeightOffset, bgColor, null);
 
             // Reset Offsets
             xOffset = 0;
@@ -66,8 +76,8 @@ public class PicturePanel extends JPanel {
     void imageCrop(BufferedImage image) {
         int imageWidth = image.getWidth();
         int imageHeight = image.getHeight();
-        double widthPercent = (double)PANEL_WIDTH / imageWidth;
-        double heightPercent = (double)PANEL_HEIGHT / imageHeight;
+        double widthPercent = (double) PANEL_WIDTH / imageWidth;
+        double heightPercent = (double) PANEL_HEIGHT / imageHeight;
         double percentDifference;
 
         if (widthPercent > heightPercent) {
@@ -75,7 +85,7 @@ public class PicturePanel extends JPanel {
 
             widthPercent -= percentDifference;
 
-            int minusPixels = PANEL_WIDTH - (int)(image.getWidth() * widthPercent);
+            int minusPixels = PANEL_WIDTH - (int) (image.getWidth() * widthPercent);
 
             xOffset = minusPixels / 2;
             panelWidthOffset = minusPixels;
@@ -85,7 +95,7 @@ public class PicturePanel extends JPanel {
 
             heightPercent -= percentDifference;
 
-            int minusPixels = PANEL_HEIGHT - (int)(image.getHeight() * heightPercent);
+            int minusPixels = PANEL_HEIGHT - (int) (image.getHeight() * heightPercent);
 
             yOffset = minusPixels / 2;
             panelHeightOffset = minusPixels;

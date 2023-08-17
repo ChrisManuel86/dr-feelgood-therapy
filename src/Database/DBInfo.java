@@ -2,17 +2,17 @@ package Database;
 
 /**
  * DBInfo
- * 
  * DBInfo class for storing all database login information
  *
  * @author Christopher Manuel
- * @version 2021.11.08
- * 
+ * @version 2023.08.17
+ * <p>
  * Change Log:
  * - Initial version
+ * - General code cleanup
  */
 
-public class DBInfo{
+public class DBInfo {
     private static String DB_HOSTNAME;
     private static String DATABASE;
     private static String DB_USERNAME;
@@ -22,10 +22,10 @@ public class DBInfo{
      * Constructor for DBInfo class
      */
     public DBInfo() {
-        this.DB_HOSTNAME = "onilynx69.live:3360";
-        this.DATABASE   = "feelgood_therapy_[unique-server-string]";
-        this.DB_USERNAME = "feelgood_admin";
-        this.DB_PASSWORD = "[placeholder]";
+        DB_HOSTNAME = "onilynx69.live:3360";
+        DATABASE = "feelgood_therapy_[unique-server-string]";
+        DB_USERNAME = "feelgood_admin";
+        DB_PASSWORD = "[placeholder]";
     }
 
     /**
@@ -45,7 +45,7 @@ public class DBInfo{
     public String getDATABASE() {
         return DATABASE;
     }
-    
+
     /**
      * Access Database username
      *

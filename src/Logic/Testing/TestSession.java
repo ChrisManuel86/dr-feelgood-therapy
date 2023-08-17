@@ -107,11 +107,11 @@ public class TestSession {
         String itemOrder = test.getSettings("ItemOrder");
         Item itemX = null;
         Item itemY = null;
-        switch(test.getSettings("SortMethod")) {
+        switch (test.getSettings("SortMethod")) {
             case "Sequential":
-                for(int i = 0; i < items.size(); i++) {
+                for (int i = 0; i < items.size(); i++) {
                     itemX = items.get(i);
-                    for(int ii = i + 1; ii < items.size(); ii++) {
+                    for (int ii = i + 1; ii < items.size(); ii++) {
                         itemY = items.get(ii);
                         questionNumber++;
                         addMatchUp(questionNumber, itemOrder, itemX, itemY);
@@ -119,8 +119,8 @@ public class TestSession {
                 }
                 break;
             case "Rotational":
-                for(int i = 1; i < items.size(); i++) {
-                    for(int ii = 0; ii < items.size() - i; ii ++) {
+                for (int i = 1; i < items.size(); i++) {
+                    for (int ii = 0; ii < items.size() - i; ii++) {
                         itemX = items.get(ii);
                         itemY = items.get(ii + i);
                         questionNumber++;
@@ -131,15 +131,15 @@ public class TestSession {
             case "Random":
                 ArrayList<MatchUp> randomMatchUps = new ArrayList<>();
 
-                for(int i = 0; i < items.size(); i++) {
+                for (int i = 0; i < items.size(); i++) {
                     itemX = items.get(i);
-                    for(int ii = i + 1; ii < items.size(); ii++) {
+                    for (int ii = i + 1; ii < items.size(); ii++) {
                         itemY = items.get(ii);
                         randomMatchUps.add(new MatchUp(-1, itemX, itemY, null));
                     }
                 }
                 Collections.shuffle(randomMatchUps);
-                for(MatchUp matchUp : randomMatchUps) {
+                for (MatchUp matchUp : randomMatchUps) {
                     questionNumber++;
                     addMatchUp(questionNumber, itemOrder, matchUp.getItemA(), matchUp.getItemB());
                 }
@@ -148,23 +148,23 @@ public class TestSession {
                 randomMatchUps = new ArrayList<>();
                 MatchUp lastMatchUp = null;
 
-                for(int i = 0; i < items.size(); i++) {
+                for (int i = 0; i < items.size(); i++) {
                     itemX = items.get(i);
-                    for(int ii = i + 1; ii < items.size(); ii++) {
+                    for (int ii = i + 1; ii < items.size(); ii++) {
                         itemY = items.get(ii);
                         randomMatchUps.add(new MatchUp(-1, itemX, itemY, null));
                     }
                 }
                 int testSize = randomMatchUps.size();
-                for(int i = 0; i < testSize; i++) {
+                for (int i = 0; i < testSize; i++) {
                     Collections.shuffle(randomMatchUps);
-                    if(lastMatchUp == null || randomMatchUps.size() == 1) {
+                    if (lastMatchUp == null || randomMatchUps.size() == 1) {
                         lastMatchUp = randomMatchUps.get(0);
                     } else {
                         Item itemA = lastMatchUp.getItemA();
                         Item itemB = lastMatchUp.getItemB();
-                        for(MatchUp matchUp : randomMatchUps) {
-                            if(itemA != matchUp.getItemA() && itemB != matchUp.getItemA() &&
+                        for (MatchUp matchUp : randomMatchUps) {
+                            if (itemA != matchUp.getItemA() && itemB != matchUp.getItemA() &&
                                     itemA != matchUp.getItemB() && itemB != matchUp.getItemB()) {
                                 lastMatchUp = matchUp;
                             }
@@ -177,12 +177,12 @@ public class TestSession {
             case "Custom":
                 String[] itemPairs = test.getSettings("CustomMatchUps").split(",");
                 String[] pairedItem;
-                for(int i = 0; i < itemPairs.length; i++) {
+                for (int i = 0; i < itemPairs.length; i++) {
                     pairedItem = itemPairs[i].split("\\|");
-                    for(Item item : items) {
-                        if(item.getName().equals(pairedItem[0])){
+                    for (Item item : items) {
+                        if (item.getName().equals(pairedItem[0])) {
                             itemX = item;
-                        } else if(item.getName().equals(pairedItem[1])) {
+                        } else if (item.getName().equals(pairedItem[1])) {
                             itemY = item;
                         }
                     }
@@ -197,14 +197,14 @@ public class TestSession {
      * Add a MatchUp to the database
      *
      * @param questionNumber int
-     * @param itemOrder String
-     * @param itemX Item
-     * @param itemY Item
+     * @param itemOrder      String
+     * @param itemX          Item
+     * @param itemY          Item
      */
     private void addMatchUp(int questionNumber, String itemOrder, Item itemX, Item itemY) {
         Item itemA;
         Item itemB;
-        if(itemOrder.equals("Random")) {
+        if (itemOrder.equals("Random")) {
             int r = new Random().nextInt(2);
             itemA = r == 0 ? itemX : itemY;
             itemB = r == 0 ? itemY : itemX;
@@ -212,7 +212,7 @@ public class TestSession {
             itemA = itemX;
             itemB = itemY;
         }
-        System.out.println("Q:" + String.valueOf(questionNumber) + " - A: " + itemA.getName() + " / B: " + itemB.getName());
+        System.out.println("Q:" + questionNumber + " - A: " + itemA.getName() + " / B: " + itemB.getName());
         matchUpList.add(new MatchUp(questionNumber, itemA, itemB, null));
     }
 
@@ -223,8 +223,8 @@ public class TestSession {
      * @return MatchUp matchUp
      */
     public MatchUp nextQuestion(String selection) {
-        if(matchUps.hasNext()) {
-            if(selection != null) {
+        if (matchUps.hasNext()) {
+            if (selection != null) {
                 matchUp.setDecision(selection);
             }
             matchUp = matchUps.next();
@@ -242,7 +242,7 @@ public class TestSession {
      * @return MatchUp matchUp
      */
     public MatchUp previousQuestion() {
-        if(matchUps.hasPrevious()) {
+        if (matchUps.hasPrevious()) {
             return matchUps.previous();
         } else {
             return new MatchUp(-1, null, null, null);
@@ -256,8 +256,8 @@ public class TestSession {
         Session session = new Session(-1, userID, test.getID(), null);
         session.setTimestamp();
         Database db = new Database();
-        int sessionID = db.insertSession(session.getUserID(),session.getTestID(),session.getTimestamp());
-        for(MatchUp matchUp : getMatchUpList()) {
+        int sessionID = db.insertSession(session.getUserID(), session.getTestID(), session.getTimestamp());
+        for (MatchUp matchUp : getMatchUpList()) {
             db.insertMatchUp(sessionID, matchUp.getQuestionNumber(), matchUp.getItemA().getID(), matchUp.getItemB().getID(), matchUp.getDecision());
         }
         db.closeConnection();
@@ -270,7 +270,7 @@ public class TestSession {
      */
     public void generate(Test selectedTest) {
         setTest(selectedTest);
-        if(selectedTest != null) {
+        if (selectedTest != null) {
             setItems(test.getID());
             this.matchUpList = new ArrayList<>();
             createMatchUps();
