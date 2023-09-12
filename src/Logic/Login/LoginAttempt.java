@@ -1,9 +1,9 @@
-package Logic.Login;
+package logic.login;
 
-import Database.Database;
-import Database.User;
+import database.Database;
+import database.User;
 
-import static GUI.MainGUI.*;
+import static gui.MainGUI.*;
 
 
 /**
@@ -61,18 +61,10 @@ public class LoginAttempt {
             match = true;
             setUser(compareUser);
             switch (user.getRole()) {
-                case "Admin":
-                    createSetupGUI();
-                    break;
-                case "Therapist":
-                    createReportGUI();
-                    break;
-                case "User":
-                    createTestGUI(user.getID());
-                    break;
-                default:
-                    System.out.println("!!!!! INVALID ROLE !!!!!");
-                    break;
+                case "Admin" -> createSetupGUI();
+                case "Therapist" -> createReportGUI();
+                case "User" -> createTestGUI(user.getID());
+                default -> System.out.println("!!!!! INVALID ROLE !!!!!");
             }
         }
         return match;

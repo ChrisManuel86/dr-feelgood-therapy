@@ -1,14 +1,14 @@
-package GUI;
+package gui;
 
-import GUI.Login.CreateAccountForm;
-import GUI.Login.LoginForm;
-import GUI.Results.ReportForm;
-import GUI.Setup.CustomizeForm;
-import GUI.Setup.SetupForm;
-import GUI.Testing.TestForm;
-import Logic.Login.LoginAttempt;
-import Logic.Setup.TestSetup;
-import Logic.Testing.TestSession;
+import gui.login.CreateAccountForm;
+import gui.login.LoginForm;
+import gui.results.ReportForm;
+import gui.setup.CustomizeForm;
+import gui.setup.SetupForm;
+import gui.testing.TestForm;
+import logic.login.LoginAttempt;
+import logic.setup.TestSetup;
+import logic.testing.TestSession;
 
 import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
@@ -22,7 +22,7 @@ import java.awt.*;
  * @Version 2023.08.17
  * <p>
  * Change log:
- * - Refactored project, removing deprecated java calls
+ * - Refactored project, removing deprecated function calls
  */
 
 public class MainGUI extends JPanel {
@@ -57,7 +57,7 @@ public class MainGUI extends JPanel {
         TestSetup testSetup = new TestSetup();
         frame = new JFrame();
         SetupForm setupForm = new SetupForm(testSetup, frame);
-        frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.getContentPane().removeAll();
         frame.getContentPane().add(setupForm.getRootPanel());
         frame.pack();
@@ -77,7 +77,7 @@ public class MainGUI extends JPanel {
             frame.getContentPane().add(setupForm.getRootPanel());
             frame.setVisible(true);
             frame.setLocationRelativeTo(customizeFrame);
-            frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);
+            frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             frame.validate();
             frame.repaint();
             frame.pack();
@@ -95,7 +95,7 @@ public class MainGUI extends JPanel {
             customizeFrame.pack();
             customizeFrame.dispose();
         }
-        frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.validate();
         frame.repaint();
         frame.pack();
@@ -106,7 +106,7 @@ public class MainGUI extends JPanel {
     public static void createLoginGUI() {
         frame = new JFrame();
         LoginForm loginForm = new LoginForm(loginAttempt, frame);
-        frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.getContentPane().removeAll();
         frame.getContentPane().add(loginForm.getRootPanel());
         frame.pack();
@@ -135,7 +135,7 @@ public class MainGUI extends JPanel {
     public static void createTestGUI(int userID) {
         TestSession session = new TestSession(userID);
         frame = new JFrame();
-        frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.getContentPane().removeAll();
         frame.getContentPane().add(new TestForm(session, frame).getRootPanel());
         frame.pack();

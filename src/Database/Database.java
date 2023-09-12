@@ -1,4 +1,4 @@
-package Database;
+package database;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static java.lang.System.err;
 import static java.sql.DriverManager.getConnection;
 
 
@@ -82,7 +83,7 @@ public class Database {
                     if (stream != null)
                         image = ImageIO.read(stream);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    e.printStackTrace(err);
                 }
                 items.add(new Item(rs.getInt("ItemID"),
                         rs.getInt("TestID"),
@@ -90,7 +91,7 @@ public class Database {
                         image));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
         return items.get(0);
     }
@@ -117,7 +118,7 @@ public class Database {
                     if (stream != null)
                         image = ImageIO.read(stream);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    e.printStackTrace(err);
                 }
                 items.add(new Item(rs.getInt("ItemID"),
                         rs.getInt("TestID"),
@@ -125,7 +126,7 @@ public class Database {
                         image));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
         return items;
     }
@@ -154,13 +155,13 @@ public class Database {
                     length = inputStream.available();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                e.printStackTrace(err);
             }
             stmt.setBinaryStream(3, inputStream, length);
 
             stmt.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
     }
 
@@ -186,7 +187,7 @@ public class Database {
                         rs.getString("Decision")));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
         return matchUps;
     }
@@ -212,7 +213,7 @@ public class Database {
             stmt.setString(5, decision);
             stmt.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
     }
 
@@ -236,7 +237,7 @@ public class Database {
                         rs.getString("Timestamp")));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
         return sessions;
     }
@@ -261,7 +262,7 @@ public class Database {
                         rs.getString("Timestamp")));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
         return sessions;
     }
@@ -286,7 +287,7 @@ public class Database {
                 return rs.getInt("ID");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
         return -1;
     }
@@ -308,7 +309,7 @@ public class Database {
                         rs.getString("Settings")));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
         return tests;
     }
@@ -333,7 +334,7 @@ public class Database {
                         null));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
         return tests;
     }
@@ -356,7 +357,7 @@ public class Database {
                     return rs.getInt("ID");
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                e.printStackTrace(err);
             }
         } else {
             String query = "UPDATE test SET Settings = ? WHERE TestID = ?;";
@@ -367,7 +368,7 @@ public class Database {
                 stmt.execute();
                 return id;
             } catch (SQLException e) {
-                e.printStackTrace();
+                e.printStackTrace(err);
             }
         }
         return -1;
@@ -396,7 +397,7 @@ public class Database {
                         rs.getString("Password")));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
         return users.isEmpty() ? null : users.get(0);
     }
@@ -424,7 +425,7 @@ public class Database {
                         null));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
         return users;
     }
@@ -450,7 +451,7 @@ public class Database {
             stmt.executeUpdate();
             System.out.println("Account successfully created");
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
     }
 
@@ -462,7 +463,7 @@ public class Database {
             try {
                 mConnection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                e.printStackTrace(err);
             }
         }
     }
@@ -476,7 +477,7 @@ public class Database {
         try {
             mConnection = getConnection(DB_CONNECTION);
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
     }
 
@@ -494,7 +495,7 @@ public class Database {
             stmt.setInt(1, id);
             stmt.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
     }
 }

@@ -1,6 +1,6 @@
-package Logic.Testing;
+package logic.testing;
 
-import Database.*;
+import database.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -107,8 +107,10 @@ public class TestSession {
         String itemOrder = test.getSettings("ItemOrder");
         Item itemX = null;
         Item itemY = null;
+        ArrayList<MatchUp> randomMatchUps = new ArrayList<>();
+
         switch (test.getSettings("SortMethod")) {
-            case "Sequential":
+            case "Sequential" -> {
                 for (int i = 0; i < items.size(); i++) {
                     itemX = items.get(i);
                     for (int ii = i + 1; ii < items.size(); ii++) {
@@ -117,8 +119,8 @@ public class TestSession {
                         addMatchUp(questionNumber, itemOrder, itemX, itemY);
                     }
                 }
-                break;
-            case "Rotational":
+            }
+            case "Rotational" -> {
                 for (int i = 1; i < items.size(); i++) {
                     for (int ii = 0; ii < items.size() - i; ii++) {
                         itemX = items.get(ii);
@@ -127,10 +129,8 @@ public class TestSession {
                         addMatchUp(questionNumber, itemOrder, itemX, itemY);
                     }
                 }
-                break;
-            case "Random":
-                ArrayList<MatchUp> randomMatchUps = new ArrayList<>();
-
+            }
+            case "Random" -> {
                 for (int i = 0; i < items.size(); i++) {
                     itemX = items.get(i);
                     for (int ii = i + 1; ii < items.size(); ii++) {
@@ -143,11 +143,9 @@ public class TestSession {
                     questionNumber++;
                     addMatchUp(questionNumber, itemOrder, matchUp.getItemA(), matchUp.getItemB());
                 }
-                break;
-            case "Random (Unbiased)":
-                randomMatchUps = new ArrayList<>();
+            }
+            case "Random (Unbiased)" -> {
                 MatchUp lastMatchUp = null;
-
                 for (int i = 0; i < items.size(); i++) {
                     itemX = items.get(i);
                     for (int ii = i + 1; ii < items.size(); ii++) {
@@ -173,8 +171,8 @@ public class TestSession {
                     randomMatchUps.remove(lastMatchUp);
                     addMatchUp(i + 1, itemOrder, lastMatchUp.getItemA(), lastMatchUp.getItemB());
                 }
-                break;
-            case "Custom":
+            }
+            case "Custom" -> {
                 String[] itemPairs = test.getSettings("CustomMatchUps").split(",");
                 String[] pairedItem;
                 for (int i = 0; i < itemPairs.length; i++) {
@@ -188,8 +186,7 @@ public class TestSession {
                     }
                     addMatchUp(i + 1, itemOrder, itemX, itemY);
                 }
-                break;
-
+            }
         }
     }
 

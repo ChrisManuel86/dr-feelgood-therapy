@@ -1,7 +1,7 @@
-package GUI.Login;
+package gui.login;
 
-import Database.User;
-import Logic.Login.LoginAttempt;
+import database.User;
+import logic.login.LoginAttempt;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,8 +10,8 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.Objects;
 
-import static GUI.MainGUI.changeLoginGUI;
-import static Resources.Constants.BUSINESS_NAME;
+import static gui.MainGUI.changeLoginGUI;
+import static resources.Constants.BUSINESS_NAME;
 
 /**
  * @author Brooke Higgins, Leron Tolmachev, Christopher Manuel
@@ -81,7 +81,7 @@ public class CreateAccountForm {
         passwordField.setText(loginAttempt.getUser().getPassword());
         firstNameField.requestFocusInWindow();
 
-        ImageIcon WARNING_ICON = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Resources/warning.gif")));
+        ImageIcon WARNING_ICON = new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/warning.gif")));
         firstNameIcon.setIcon(WARNING_ICON);
         firstNameIcon.setVisible(false);
         lastNameIcon.setIcon(WARNING_ICON);
@@ -106,7 +106,7 @@ public class CreateAccountForm {
         };
         ActionListener login = e -> {
             loginAttempt.getUser().setEmail(emailField.getText());
-            loginAttempt.getUser().setPassword(passwordField.getText());
+            loginAttempt.getUser().setPassword(passwordField.getSelectedText());
             changeLoginGUI();
         };
 
@@ -149,9 +149,9 @@ public class CreateAccountForm {
                 !lastNameField.getText().isEmpty() &&
                 loginAttempt.validateEmailAddress(emailField.getText()) &&
                 emailConfirmField.getText().equalsIgnoreCase(emailField.getText()) &&
-                loginAttempt.validatePassword(passwordField.getText()) &&
-                passwordConfirmField.getText().equals(passwordField.getText())) {
-            loginAttempt.setUser(new User(-1, "User", firstNameField.getText(), lastNameField.getText(), emailField.getText().toLowerCase(), passwordField.getText()));
+                loginAttempt.validatePassword(passwordField.getSelectedText()) &&
+                passwordConfirmField.getSelectedText().equals(passwordField.getSelectedText())) {
+            loginAttempt.setUser(new User(-1, "User", firstNameField.getText(), lastNameField.getText(), emailField.getText().toLowerCase(), passwordField.getSelectedText()));
             if (loginAttempt.register()) {
                 frame.dispose();
                 loginAttempt.login();
@@ -171,9 +171,9 @@ public class CreateAccountForm {
             case "Confirm Email Address" ->
                     emailConfirmIcon.setVisible(!emailField.getText().equalsIgnoreCase(emailConfirmField.getText()));
             case "Password" ->
-                    passwordIcon.setVisible(!loginAttempt.validatePassword(passwordField.getText()) || passwordField.getText().length() < 8);
+                    passwordIcon.setVisible(!loginAttempt.validatePassword(passwordField.getSelectedText()) || passwordField.getSelectedText().length() < 8);
             case "Confirm Password" ->
-                    passwordConfirmIcon.setVisible(!passwordField.getText().equals(passwordConfirmField.getText()));
+                    passwordConfirmIcon.setVisible(!passwordField.getSelectedText().equals(passwordConfirmField.getSelectedText()));
         }
     }
 }

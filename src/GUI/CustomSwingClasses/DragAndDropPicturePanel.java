@@ -1,4 +1,4 @@
-package GUI.CustomSwingClasses;
+package gui.customSwingClasses;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+
+import static java.lang.System.err;
 
 /**
  * DragAndDropPicturePanel
@@ -119,11 +121,12 @@ public class DragAndDropPicturePanel extends PicturePanel implements DropTargetL
             image = ImageIO.read(file);
             pcs.firePropertyChange("image", tempImage, ImageIO.read(file));
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void drop(DropTargetDropEvent dtde) {
         dragging = false;
         Transferable tr = dtde.getTransferable();
@@ -136,11 +139,11 @@ public class DragAndDropPicturePanel extends PicturePanel implements DropTargetL
                 // And add the list of file names to our text area
                 try {
                     List<File> list;
-                    for (File file : list = Collections.unmodifiableList((List<File>) tr.getTransferData(flavor))) {
+                    for (File files : list = Collections.unmodifiableList((List<File>) tr.getTransferData(flavor))) {
                         loadFile(list.get(0));
                     }
                 } catch (UnsupportedFlavorException | IOException e) {
-                    e.printStackTrace();
+                    e.printStackTrace(err);
                 }
 
                 dtde.dropComplete(true);

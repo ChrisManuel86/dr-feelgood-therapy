@@ -1,9 +1,9 @@
-package Logic.Results;
+package logic.results;
 
-import Database.Database;
-import Database.Session;
-import Database.Test;
-import Database.User;
+import database.Database;
+import database.Session;
+import database.Test;
+import database.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;

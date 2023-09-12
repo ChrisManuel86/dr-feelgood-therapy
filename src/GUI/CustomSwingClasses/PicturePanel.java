@@ -1,4 +1,4 @@
-package GUI.CustomSwingClasses;
+package gui.customSwingClasses;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -6,6 +6,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
+
+import static java.lang.System.err;
 
 /**
  * PicturePanel
@@ -38,11 +40,11 @@ public class PicturePanel extends JPanel {
 
     public void setImage(BufferedImage image) {
         try {
-            BufferedImage defaultImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Resources/defaultImage.png")));
+            BufferedImage defaultImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("/resources/defaultImage.png")));
             this.image = image != null ? image : defaultImage;
             repaint();
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
     }
 

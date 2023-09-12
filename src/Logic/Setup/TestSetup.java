@@ -1,9 +1,9 @@
-package Logic.Setup;
+package logic.setup;
 
-import Database.Database;
-import Database.Item;
-import Database.Session;
-import Database.Test;
+import database.Database;
+import database.Item;
+import database.Session;
+import database.Test;
 
 import java.util.ArrayList;
 

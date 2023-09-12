@@ -1,9 +1,9 @@
-package GUI.Testing;
+package gui.testing;
 
-import Database.MatchUp;
-import Database.Test;
-import GUI.CustomSwingClasses.PicturePanel;
-import Logic.Testing.TestSession;
+import database.MatchUp;
+import database.Test;
+import gui.customSwingClasses.PicturePanel;
+import logic.testing.TestSession;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import static Resources.Constants.BUSINESS_NAME;
+import static resources.Constants.BUSINESS_NAME;
 
 /**
  * TestForm

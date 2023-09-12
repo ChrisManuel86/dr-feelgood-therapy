@@ -1,10 +1,10 @@
-package GUI.Results;
+package gui.results;
 
-import Database.Session;
-import Database.Test;
-import Database.User;
-import Logic.Results.Report;
-import Logic.Results.Results;
+import database.Session;
+import database.Test;
+import database.User;
+import logic.results.Report;
+import logic.results.Results;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -16,7 +16,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static Resources.Constants.BUSINESS_NAME;
+import static resources.Constants.BUSINESS_NAME;
 
 /**
  * ReportForm
@@ -299,7 +299,7 @@ public class ReportForm {
     }
 
     private void actionPerformed(ActionEvent e) {
-        JComboBox comboBox = ((JComboBox) e.getSource());
+        JComboBox comboBox = (JComboBox) e.getSource();
         if (comboBox.getSelectedIndex() != 0) {
             makeSelection(comboBox.getActionCommand());
         } else {

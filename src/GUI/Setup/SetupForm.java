@@ -1,9 +1,9 @@
-package GUI.Setup;
+package gui.setup;
 
-import Database.Item;
-import Database.Test;
-import GUI.CustomSwingClasses.DragAndDropPicturePanel;
-import Logic.Setup.TestSetup;
+import database.Item;
+import database.Test;
+import gui.customSwingClasses.DragAndDropPicturePanel;
+import logic.setup.TestSetup;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
@@ -13,8 +13,9 @@ import java.beans.PropertyChangeListener;
 import java.net.URI;
 import java.util.Objects;
 
-import static GUI.MainGUI.changeSetupGUI;
-import static Resources.Constants.BUSINESS_NAME;
+import static gui.MainGUI.changeSetupGUI;
+import static resources.Constants.BUSINESS_NAME;
+import static java.lang.System.err;
 
 /**
  * SetupForm
@@ -97,7 +98,7 @@ public class SetupForm {
 
         businessLabel.setText(BUSINESS_NAME);
         testEditPanel.setVisible(false);
-        warningLabel.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/Resources/warning.gif"))));
+        warningLabel.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/warning.gif"))));
         warningLabel.setVisible(false);
         itemListModel = new DefaultListModel<>();
         updateTestList();
@@ -212,7 +213,7 @@ public class SetupForm {
         try {
             Desktop.getDesktop().browse(new URI(urlString));
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(err);
         }
     }
 

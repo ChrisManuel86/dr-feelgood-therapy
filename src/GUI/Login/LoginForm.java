@@ -1,7 +1,7 @@
-package GUI.Login;
+package gui.login;
 
-import Database.User;
-import Logic.Login.LoginAttempt;
+import database.User;
+import logic.login.LoginAttempt;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,8 +10,8 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.Objects;
 
-import static GUI.MainGUI.changeLoginGUI;
-import static Resources.Constants.BUSINESS_NAME;
+import static gui.MainGUI.changeLoginGUI;
+import static resources.Constants.BUSINESS_NAME;
 
 /**
  * LoginForm
@@ -60,7 +60,7 @@ public class LoginForm {
 
         rootPanel.setPreferredSize(new Dimension(650, 200));
 
-        ImageIcon WARNING_ICON = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Resources/warning.gif")));
+        ImageIcon WARNING_ICON = new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/warning.gif")));
         emailIcon.setIcon(WARNING_ICON);
         emailIcon.setVisible(false);
         passwordIcon.setIcon(WARNING_ICON);
@@ -75,13 +75,13 @@ public class LoginForm {
 
         // Create Action Listeners
         ActionListener createAccount = e -> {
-            loginAttempt.setUser(new User(-1, "User", null, null, emailField.getText(), passwordField.getText()));
+            loginAttempt.setUser(new User(-1, "User", null, null, emailField.getText(), passwordField.getSelectedText()));
             changeLoginGUI();
         };
         ActionListener login = e -> {
             if (!emailIcon.isVisible() && !passwordIcon.isVisible()) {
                 loginAttempt.getUser().setEmail(emailField.getText());
-                loginAttempt.getUser().setPassword(passwordField.getText());
+                loginAttempt.getUser().setPassword(passwordField.getSelectedText());
                 if (loginAttempt.login()) {
                     frame.dispose();
                     System.out.println(" - SUCCESSFUL LOGIN - ");
@@ -132,7 +132,7 @@ public class LoginForm {
     private void validate(String field) {
         switch (field) {
             case "Email" -> emailIcon.setVisible(!loginAttempt.validateEmailAddress(emailField.getText()));
-            case "Password" -> passwordIcon.setVisible(!loginAttempt.validatePassword(passwordField.getText()));
+            case "Password" -> passwordIcon.setVisible(!loginAttempt.validatePassword(passwordField.getSelectedText()));
         }
     }
 }

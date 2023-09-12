@@ -1,9 +1,9 @@
-package Logic.Results;
+package logic.results;
 
-import Database.Database;
-import Database.Item;
-import Database.MatchUp;
-import Database.Session;
+import database.Database;
+import database.Item;
+import database.MatchUp;
+import database.Session;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -70,18 +70,10 @@ public class Results {
                             (rowItem.getName().equals(matchUp.getItemB().getName()) &&
                                     colItem.getName().equals(matchUp.getItemA().getName()))) {
                         switch (matchUp.getDecision()) {
-                            case "A":
-                                winner = matchUp.getItemA().getName();
-                                break;
-                            case "B":
-                                winner = matchUp.getItemB().getName();
-                                break;
-                            case "":
-                                winner = "TIE";
-                                break;
-                            default:
-                                System.out.println("ERROR WITH MATRIX CREATION?");
-                                break;
+                            case "A" -> winner = matchUp.getItemA().getName();
+                            case "B" -> winner = matchUp.getItemB().getName();
+                            case "" -> winner = "TIE";
+                            default -> System.out.println("ERROR WITH MATRIX CREATION?");
                         }
                     }
                 }
@@ -128,7 +120,7 @@ public class Results {
                     score.setLosses(score.getLosses() + 1);
                 } else if (id == bID && matchUp.getDecision().equals("A")) {
                     score.setLosses(score.getLosses() + 1);
-                } else if ((id == aID || id == bID) && matchUp.getDecision().equals("")) {
+                } else if ((id == aID || id == bID) && matchUp.getDecision().isEmpty()) {
                     score.setTies(score.getTies() + 1);
                 }
             }

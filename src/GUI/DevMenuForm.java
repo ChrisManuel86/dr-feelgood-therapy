@@ -1,12 +1,14 @@
-package GUI;
+package gui;
 
 import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Dimension;
 
-import static GUI.MainGUI.*;
+import static gui.MainGUI.*;
+
 
 /**
  * DevMenuForm
@@ -32,7 +34,10 @@ public class DevMenuForm extends ComponentUI {
      * Constructor for the DevMenuForm Class
      */
     public DevMenuForm() {
+
         rootPanel.setPreferredSize(new Dimension(300, 200));
+        rootPanel.setVisible(true);
+        
         adminSetupButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -40,6 +45,7 @@ public class DevMenuForm extends ComponentUI {
                 createSetupGUI();
             }
         });
+
         userLoginButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -47,6 +53,7 @@ public class DevMenuForm extends ComponentUI {
                 createLoginGUI();
             }
         });
+
         testButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -54,6 +61,7 @@ public class DevMenuForm extends ComponentUI {
                 createTestGUI(1);
             }
         });
+
         resultReportingButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

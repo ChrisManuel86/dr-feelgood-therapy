@@ -1,8 +1,8 @@
-package GUI.Setup;
+package gui.setup;
 
-import Database.Item;
-import Database.MatchUp;
-import Logic.Setup.TestSetup;
+import database.Item;
+import database.MatchUp;
+import logic.setup.TestSetup;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,8 +11,8 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.ArrayList;
 
-import static GUI.MainGUI.createSetupGUI;
-import static Resources.Constants.BUSINESS_NAME;
+import static gui.MainGUI.createSetupGUI;
+import static resources.Constants.BUSINESS_NAME;
 
 
 /**
@@ -79,13 +79,13 @@ public class CustomizeForm {
         this.testSetup = testSetup;
 
         // Set Icons
-        questionTextIcon.setIcon(new ImageIcon(getClass().getResource("/Resources/warning.gif")));
+        questionTextIcon.setIcon(new ImageIcon(getClass().getResource("/resources/warning.gif")));
         questionTextIcon.setVisible(false);
-        tieButtonTextIcon.setIcon(new ImageIcon(getClass().getResource("/Resources/warning.gif")));
+        tieButtonTextIcon.setIcon(new ImageIcon(getClass().getResource("/resources/warning.gif")));
         tieButtonTextIcon.setVisible(false);
-        moveUpButton.setIcon(new ImageIcon(getClass().getResource("/Resources/customUp.png")));
-        swapButton.setIcon(new ImageIcon(getClass().getResource("/Resources/customSwap.png")));
-        moveDownButton.setIcon(new ImageIcon(getClass().getResource("/Resources/customDown.png")));
+        moveUpButton.setIcon(new ImageIcon(getClass().getResource("/resources/customUp.png")));
+        swapButton.setIcon(new ImageIcon(getClass().getResource("/resources/customSwap.png")));
+        moveDownButton.setIcon(new ImageIcon(getClass().getResource("/resources/customDown.png")));
 
         matchUpList.setFont(new Font("Monospaced", Font.BOLD, 12));
 
@@ -117,45 +117,43 @@ public class CustomizeForm {
                 descriptionTextPane.setVisible(true);
                 assert sortMethodComboBox.getSelectedItem() != null;
                 switch ((String) sortMethodComboBox.getSelectedItem()) {
-                    case "Random":
+                    case "Random" -> {
                         descriptionTextPane.setText(SORT_RANDOM_DESCRIPTION);
                         matchUpPanel.setVisible(false);
                         sortDemo.setVisible(false);
                         itemOrderCheckBox.setSelected(true);
                         rootPanel.setPreferredSize(SIZE_MEDIUM);
-                        break;
-                    case "Random (Unbiased)":
+                    }
+                    case "Random (Unbiased)" -> {
                         descriptionTextPane.setText(SORT_RANDOMUNBIASED_DESCRIPTION);
                         matchUpPanel.setVisible(false);
                         sortDemo.setVisible(false);
                         itemOrderCheckBox.setEnabled(true);
                         rootPanel.setPreferredSize(SIZE_MEDIUM);
-                        break;
-                    case "Rotational":
+                    }
+                    case "Rotational" -> {
                         descriptionTextPane.setText(SORT_ROTATIONAL_DESCRIPTION);
                         setMatchUpList("Rotational");
-                        sortDemo.setIcon(new ImageIcon(getClass().getResource("/Resources/rotational.gif")));
+                        sortDemo.setIcon(new ImageIcon(getClass().getResource("/resources/rotational.gif")));
                         sortDemo.setVisible(true);
                         matchUpPanel.setVisible(true);
                         customOrderPanel.setVisible(false);
                         itemOrderCheckBox.setSelected(testSetup.getTest().getSettings("ItemOrder").equals("Random"));
                         fixedOrderPanel.setVisible(true);
                         rootPanel.setPreferredSize(SIZE_LARGE);
-
-                        break;
-                    case "Sequential":
+                    }
+                    case "Sequential" -> {
                         descriptionTextPane.setText(SORT_SEQUENTIAL_DESCRIPTION);
                         setMatchUpList("Sequential");
-                        sortDemo.setIcon(new ImageIcon(getClass().getResource("/Resources/sequential.gif")));
+                        sortDemo.setIcon(new ImageIcon(getClass().getResource("/resources/sequential.gif")));
                         sortDemo.setVisible(true);
                         matchUpPanel.setVisible(true);
                         customOrderPanel.setVisible(false);
                         itemOrderCheckBox.setSelected(testSetup.getTest().getSettings("ItemOrder").equals("Random"));
                         fixedOrderPanel.setVisible(true);
                         rootPanel.setPreferredSize(SIZE_LARGE);
-
-                        break;
-                    case "Custom":
+                    }
+                    case "Custom" -> {
                         setMatchUpList(testSetup.getTest().getSettings("CustomMatchUps"));
                         descriptionTextPane.setText(SORT_CUSTOM_DESCRIPTION);
                         sortDemo.setVisible(false);
@@ -164,7 +162,7 @@ public class CustomizeForm {
                         itemOrderCheckBox.setSelected(false);
                         fixedOrderPanel.setVisible(false);
                         rootPanel.setPreferredSize(SIZE_LARGE);
-                        break;
+                    }
                 }
             } else {
                 descriptionTextPane.setVisible(false);
@@ -183,7 +181,7 @@ public class CustomizeForm {
                 MatchUp selectedMatchUp = matchUpList.getSelectedValue();
                 int index = matchUpList.getSelectedIndex();
                 switch (e.getActionCommand()) {
-                    case "Up":
+                    case "Up" -> {
                         if (index > 0) {
                             selectedMatchUp.setQuestionNumber(selectedMatchUp.getQuestionNumber() - 1);
                             matchUpListModel.get(index - 1).setQuestionNumber(matchUpListModel.get(index - 1).getQuestionNumber() - 1);
@@ -191,8 +189,8 @@ public class CustomizeForm {
                             matchUpListModel.add(index - 1, selectedMatchUp);
                             index -= 1;
                         }
-                        break;
-                    case "Down":
+                    }
+                    case "Down" -> {
                         if (index < matchUpListModel.size() - 1) {
                             selectedMatchUp.setQuestionNumber(selectedMatchUp.getQuestionNumber() + 1);
                             matchUpListModel.get(index + 1).setQuestionNumber(matchUpListModel.get(index + 1).getQuestionNumber() + 1);
@@ -200,13 +198,13 @@ public class CustomizeForm {
                             matchUpListModel.add(index + 1, selectedMatchUp);
                             index += 1;
                         }
-                        break;
-                    case "Swap":
+                    }
+                    case "Swap" -> {
                         Item itemX = selectedMatchUp.getItemB();
                         Item itemY = selectedMatchUp.getItemA();
                         selectedMatchUp.setItemA(itemX);
                         selectedMatchUp.setItemB(itemY);
-                        break;
+                    }
                 }
                 matchUpList.setModel(matchUpListModel);
                 matchUpList.setSelectedIndex(index);
@@ -235,15 +233,13 @@ public class CustomizeForm {
             String[] options = "Edit Another Test,Continue Editing,Exit".split(",");
             businessLabel.setIcon(null);
             switch (JOptionPane.showOptionDialog(null, COMPLETE_CONFIRM_TEXT, COMPLETE_CONFIRM_TITLE, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0])) {
-                case 0:
+                case 0 -> {
                     frame.dispose();
                     createSetupGUI();
-                    break;
-                case 2:
-                    frame.dispose();
-                    break;
-                default:
-                    break;
+                }
+                case 2 -> frame.dispose();
+                default -> {
+                }
             }
 
         };
@@ -284,7 +280,7 @@ public class CustomizeForm {
         ArrayList<MatchUp> matchUps = new ArrayList<>();
         int questionNumber = 0;
         switch (sortMethod) {
-            case "Sequential":
+            case "Sequential" -> {
                 for (int i = 0; i < items.size(); i++) {
                     Item itemA = items.get(i);
                     for (int ii = i; ii < items.size(); ii++) {
@@ -295,8 +291,8 @@ public class CustomizeForm {
                         }
                     }
                 }
-                break;
-            case "Rotational":
+            }
+            case "Rotational" -> {
                 for (int i = 1; i < items.size(); i++) {
                     for (int ii = 0; ii < items.size() - i; ii++) {
                         Item itemA = items.get(ii);
@@ -305,11 +301,12 @@ public class CustomizeForm {
                         matchUps.add(new MatchUp(questionNumber, itemA, itemB, null));
                     }
                 }
-                break;
-            case "none":
+            }
+            case "none" -> {
                 setMatchUpList("Sequential");
                 return;
-            default:
+            }
+            default -> {
                 String customMatchUps = testSetup.getTest().getSettings("CustomMatchUps");
                 String[] itemPairs = customMatchUps.split(",");
                 String[] pairedItem;
@@ -326,7 +323,7 @@ public class CustomizeForm {
                     }
                     matchUps.add(new MatchUp(i + 1, itemA, itemB, null));
                 }
-                break;
+            }
         }
         matchUpListModel = new DefaultListModel<>();
         for (MatchUp matchUp : matchUps) {
@@ -337,12 +334,8 @@ public class CustomizeForm {
 
     private void validate(String field) {
         switch (field) {
-            case "Question Text":
-                questionTextIcon.setVisible(questionTextField.getText().isEmpty());
-                break;
-            case "Tie Button Text":
-                tieButtonTextIcon.setVisible(tieTextField.getText().isEmpty());
-                break;
+            case "Question Text" -> questionTextIcon.setVisible(questionTextField.getText().isEmpty());
+            case "Tie Button Text" -> tieButtonTextIcon.setVisible(tieTextField.getText().isEmpty());
         }
     }
 }
